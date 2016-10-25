@@ -1,13 +1,18 @@
 package com.crossover.trial.weather;
 
-import com.google.gson.Gson;
+import static com.crossover.trial.weather.RestWeatherCollectorEndpoint.addAirport;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
-import java.util.*;
-import java.util.logging.Logger;
 
-import static com.crossover.trial.weather.RestWeatherCollectorEndpoint.addAirport;
+import com.google.gson.Gson;
 
 /**
  * The Weather App REST endpoint allows clients to query, update and check health stats. Currently, all data is
@@ -74,7 +79,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         Map<String, Double> freq = new HashMap<>();
         // fraction of queries
         for (AirportData data : airportData) {
-            double frac = (double)requestFrequency.getOrDefault(data, 0) / requestFrequency.size();
+            double frac = requestFrequency.isEmpty() ? 0 : (double)requestFrequency.getOrDefault(data, 0) / requestFrequency.size();
             freq.put(data.getIata(), frac);
         }
         retval.put("iata_freq", freq);
