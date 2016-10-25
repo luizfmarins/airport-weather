@@ -79,8 +79,10 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         Map<String, Double> freq = new HashMap<>();
         // fraction of queries
         for (AirportData data : airportData) {
-            double frac = requestFrequency.isEmpty() ? 0 : (double)requestFrequency.getOrDefault(data, 0) / requestFrequency.size();
-            freq.put(data.getIata(), frac);
+        	if (!requestFrequency.isEmpty()) {
+        		double frac = (double)requestFrequency.getOrDefault(data, 0) / requestFrequency.size();
+        		freq.put(data.getIata(), frac);
+        	}
         }
         retval.put("iata_freq", freq);
 

@@ -13,6 +13,7 @@ import org.glassfish.grizzly.http.server.HttpServerFilter;
 import org.glassfish.grizzly.http.server.HttpServerProbe;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 
@@ -24,7 +25,8 @@ import org.glassfish.jersey.server.ResourceConfig;
  */
 public class WeatherServer {
 
-    private static final String BASE_URL = "http://localhost:9090/";
+	public static final int PORT = 9090;
+    private static final String BASE_URL = "http://localhost:" + PORT + "/";
 
     private HttpServer server;
 

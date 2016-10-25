@@ -19,11 +19,6 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 		.then().assertThat()
 			.statusCode(200)
 			.body("datasize", equalTo(0))
-			.body("iata_freq.EWR", equalTo(0.0f))
-			.body("iata_freq.BOS", equalTo(0.0f))
-			.body("iata_freq.LGA", equalTo(0.0f))
-			.body("iata_freq.JFK", equalTo(0.0f))
-			.body("iata_freq.MMU", equalTo(0.0f))
 			.body("radius_freq", hasSize(1001));
 	}
 	
