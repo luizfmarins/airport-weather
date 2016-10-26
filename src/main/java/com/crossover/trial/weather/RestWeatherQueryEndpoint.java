@@ -1,6 +1,7 @@
 package com.crossover.trial.weather;
 
 import static com.crossover.trial.weather.RestWeatherCollectorEndpoint.addAirport;
+import static com.crossover.trial.weather.InitialAirports.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -187,11 +188,11 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         atmosphericInformation.clear();
         requestFrequency.clear();
 
-        addAirport("BOS", 42.364347, -71.005181);
-        addAirport("EWR", 40.6925, -74.168667);
-        addAirport("JFK", 40.639751, -73.778925);
-        addAirport("LGA", 40.777245, -73.872608);
-        addAirport("MMU", 40.79935, -74.4148747);
+        addAirport(BOS, 42.364347, -71.005181);
+        addAirport(EWR, 40.6925, -74.168667);
+        addAirport(JFK, 40.639751, -73.778925);
+        addAirport(LGA, 40.777245, -73.872608);
+        addAirport(MMU, 40.79935, -74.4148747);
     }
 
 }
