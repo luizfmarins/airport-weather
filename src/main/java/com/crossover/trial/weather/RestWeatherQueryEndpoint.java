@@ -87,7 +87,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
 
         int[] hist = new int[m];
         for (Map.Entry<Double, Integer> e : radiusFreq.entrySet()) {
-            int i = e.getKey().intValue() % 10;
+            int i = e.getKey().intValue();
             hist[i] += e.getValue();
         }
         retval.put("radius_freq", hist);
@@ -138,7 +138,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
     public void updateRequestFrequency(String iata, Double radius) {
         AirportData airportData = findAirportData(iata);
         requestFrequency.put(airportData, requestFrequency.getOrDefault(airportData, 0) + 1);
-        radiusFreq.put(radius, radiusFreq.getOrDefault(radius, 0));
+        radiusFreq.put(radius, radiusFreq.getOrDefault(radius, 0) + 1);
     }
 
     /**
