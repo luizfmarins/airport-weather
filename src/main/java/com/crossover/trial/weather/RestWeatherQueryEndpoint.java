@@ -23,13 +23,9 @@ import com.google.gson.Gson;
 @Path("/query")
 public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
 
-    public final static Logger LOGGER = Logger.getLogger("WeatherQuery");
-
-    /** earth radius in KM */
-    public static final double R = 6372.8;
-
-    /** shared gson json to object factory */
-    public static final Gson gson = new Gson();
+    private final static Logger LOGGER = Logger.getLogger("WeatherQuery");
+    private static final double EARTH_RADIUS_KM = 6372.8;
+    private static final Gson gson = new Gson();
 
     /** all known airports */
     protected static List<AirportData> airportData = new ArrayList<>();
@@ -79,10 +75,8 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         Map<String, Double> freq = new HashMap<>();
         // fraction of queries
         for (AirportData data : airportData) {
-        	if (!requestFrequency.isEmpty()) {
-        		double frac = (double)requestFrequency.getOrDefault(data, 0) / requestFrequency.size();
-        		freq.put(data.getIata(), frac);
-        	}
+    		double frac = requestFrequency.isEmpty() ? 0 : (double)requestFrequency.getOrDefault(data, 0) / requestFrequency.size();
+    		freq.put(data.getIata(), frac);
         }
         retval.put("iata_freq", freq);
 
@@ -182,7 +176,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         double a =  Math.pow(Math.sin(deltaLat / 2), 2) + Math.pow(Math.sin(deltaLon / 2), 2)
                 * Math.cos(ad1.latitude) * Math.cos(ad2.latitude);
         double c = 2 * Math.asin(Math.sqrt(a));
-        return R * c;
+        return EARTH_RADIUS_KM * c;
     }
 
     /**
