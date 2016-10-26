@@ -1,7 +1,11 @@
 package com.crossover.trial.weather;
 
+import static com.crossover.trial.weather.InitialAirports.BOS;
+import static com.crossover.trial.weather.InitialAirports.EWR;
+import static com.crossover.trial.weather.InitialAirports.JFK;
+import static com.crossover.trial.weather.InitialAirports.LGA;
+import static com.crossover.trial.weather.InitialAirports.MMU;
 import static com.crossover.trial.weather.RestWeatherCollectorEndpoint.addAirport;
-import static com.crossover.trial.weather.InitialAirports.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,12 +45,13 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
      * performance metrics {@link #ping()}
      */
     public static Map<AirportData, Integer> requestFrequency = new HashMap<AirportData, Integer>();
-
     public static Map<Double, Integer> radiusFreq = new HashMap<Double, Integer>();
-
+    private static int weatherQueryCount = 0;
+    
     static {
         init();
     }
+
     /**
      * Retrieve service health including total size of valid data points and request frequency information.
      *
@@ -76,7 +81,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         Map<String, Double> freq = new HashMap<>();
         // fraction of queries
         for (AirportData data : airportData) {
-    		double frac = requestFrequency.isEmpty() ? 0 : (double)requestFrequency.getOrDefault(data, 0) / requestFrequency.size();
+    		double frac = weatherQueryCount == 0 ? 0 : (double)requestFrequency.getOrDefault(data, 0) / weatherQueryCount;
     		freq.put(data.getIata(), frac);
         }
         retval.put("iata_freq", freq);
@@ -139,6 +144,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         AirportData airportData = findAirportData(iata);
         requestFrequency.put(airportData, requestFrequency.getOrDefault(airportData, 0) + 1);
         radiusFreq.put(radius, radiusFreq.getOrDefault(radius, 0) + 1);
+        weatherQueryCount++;
     }
 
     /**
@@ -187,6 +193,8 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         airportData.clear();
         atmosphericInformation.clear();
         requestFrequency.clear();
+        radiusFreq.clear();
+        weatherQueryCount = 0;
 
         addAirport(BOS, 42.364347, -71.005181);
         addAirport(EWR, 40.6925, -74.168667);
@@ -194,5 +202,10 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         addAirport(LGA, 40.777245, -73.872608);
         addAirport(MMU, 40.79935, -74.4148747);
     }
+
+	// TODO
+	public static void cleanup() {
+		init();
+	}
 
 }

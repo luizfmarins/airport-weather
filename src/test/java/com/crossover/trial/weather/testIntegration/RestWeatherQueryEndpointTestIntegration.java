@@ -20,7 +20,6 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 
 	private static final AtmosphericInformation EMPTY_ATMOSPHERIC_INFORMATION = new AtmosphericInformation();
 
-	// TODO Rurring the whole class breaks tests
 	@Test
 	public void ping_noPreviousWeatherQueries() {
 		get("/ping")
@@ -61,11 +60,7 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 			.then().assertThat()
 			.statusCode(200)
 			.body("datasize", equalTo(0))
-			.body("iata_freq.BOS", equalTo(2.0f)) 
-			.body("iata_freq.EWR", equalTo(0.0f)) 
-			.body("iata_freq.LGA", equalTo(0.0f)) 
-			.body("iata_freq.JFK", equalTo(0.0f)) 
-			.body("iata_freq.MMU", equalTo(0.0f))
+			.body("iata_freq.BOS", equalTo(1.0f)) 
 			.body("radius_freq", hasSize(101))
 			.body("radius_freq", hasRadiusFreq(0, 1))
 			.body("radius_freq", hasRadiusFreq(100, 1)); 
@@ -80,11 +75,8 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 			.then().assertThat()
 			.statusCode(200)
 			.body("datasize", equalTo(0))
-			.body("iata_freq.BOS", equalTo(1.0f)) 
-			.body("iata_freq.EWR", equalTo(0.0f)) 
-			.body("iata_freq.LGA", equalTo(0.0f)) 
-			.body("iata_freq.JFK", equalTo(1.0f)) 
-			.body("iata_freq.MMU", equalTo(0.0f))
+			.body("iata_freq.BOS", equalTo(0.5f)) 
+			.body("iata_freq.JFK", equalTo(0.5f)) 
 			.body("radius_freq", hasSize(101))
 			.body("radius_freq", hasRadiusFreq(0, 1))
 			.body("radius_freq", hasRadiusFreq(100, 1)); 
@@ -102,29 +94,11 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 			.then().assertThat()
 			.statusCode(200)
 			.body("datasize", equalTo(0))
-			.body("iata_freq.BOS", equalTo(5.0f)) 
-			.body("iata_freq.EWR", equalTo(0.0f)) 
-			.body("iata_freq.LGA", equalTo(0.0f)) 
-			.body("iata_freq.JFK", equalTo(0.0f)) 
-			.body("iata_freq.MMU", equalTo(0.0f))
+			.body("iata_freq.BOS", equalTo(1.0f)) 
 			.body("radius_freq", hasSize(155))
 			.body("radius_freq", hasRadiusFreq(0, 1))
 			.body("radius_freq", hasRadiusFreq(100, 2)) 
 			.body("radius_freq", hasRadiusFreq(154, 2)); 
-	}
-	
-	@Test
-	public void birl() {
-		get("/weather/" + BOS + "/0");
-		get("/weather/" + BOS + "/100");
-		get("/weather/" + BOS + "/154.48");
-		get("/weather/" + BOS + "/154");
-		get("/weather/" + BOS + "/154");
-		get("/weather/" + BOS + "/154");
-		
-		get("/ping")
-		.then().assertThat()
-		.statusCode(200);
 	}
 	
 	@Test
