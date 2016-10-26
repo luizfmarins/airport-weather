@@ -13,7 +13,6 @@ import org.glassfish.grizzly.http.server.HttpServerFilter;
 import org.glassfish.grizzly.http.server.HttpServerProbe;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 

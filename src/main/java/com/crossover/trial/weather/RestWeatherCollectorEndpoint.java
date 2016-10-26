@@ -31,9 +31,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
     }
 
     @Override
-    public Response updateWeather(@PathParam("iata") String iataCode,
-                                  @PathParam("pointType") String pointType,
-                                  String datapointJson) {
+    public Response updateWeather(String iataCode, String pointType, String datapointJson) {
         try {
             addDataPoint(iataCode, pointType, gson.fromJson(datapointJson, DataPoint.class));
         } catch (WeatherException e) {

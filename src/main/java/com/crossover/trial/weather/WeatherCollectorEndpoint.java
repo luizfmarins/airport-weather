@@ -1,5 +1,8 @@
 package com.crossover.trial.weather;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,6 +34,7 @@ public interface WeatherCollectorEndpoint {
      * @return HTTP Response code
      */
     @POST
+    @Consumes(APPLICATION_JSON)
     @Path("/weather/{iata}/{pointType}")
     Response updateWeather(@PathParam("iata") String iataCode,
                            @PathParam("pointType") String pointType,
