@@ -1,5 +1,7 @@
 package com.crossover.trial.weather.testIntegration;
 
+import static com.jayway.restassured.RestAssured.registerParser;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -7,6 +9,7 @@ import org.junit.BeforeClass;
 import com.crossover.trial.weather.RestWeatherQueryEndpoint;
 import com.crossover.trial.weather.WeatherServer;
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.parsing.Parser;
 
 public abstract class TestBase {
 
@@ -16,6 +19,7 @@ public abstract class TestBase {
 	public static void beforeClass() {
 		startServer();
 		RestAssured.port = WeatherServer.PORT;
+		registerParser("text/plain", Parser.JSON);
 	}
 	
 	@Before

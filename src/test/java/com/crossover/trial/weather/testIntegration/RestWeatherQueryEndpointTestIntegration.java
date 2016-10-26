@@ -7,6 +7,7 @@ import static com.jayway.restassured.RestAssured.registerParser;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static javax.ws.rs.core.Response.Status.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 	public void ping_noPreviousWeatherQueries() {
 		get("/ping")
 			.then().assertThat()
-			.statusCode(200)
+			.statusCode(OK.getStatusCode())
 			.body("datasize", equalTo(0))
 			.body("iata_freq.BOS", equalTo(0.0f)) 
 			.body("iata_freq.EWR", equalTo(0.0f)) 
@@ -40,7 +41,7 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 		
 		get("/ping")
 			.then().assertThat()
-			.statusCode(200)
+			.statusCode(OK.getStatusCode())
 			.body("datasize", equalTo(0))
 			.body("iata_freq.BOS", equalTo(1.0f)) 
 			.body("iata_freq.EWR", equalTo(0.0f)) 
@@ -58,7 +59,7 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 		
 		get("/ping")
 			.then().assertThat()
-			.statusCode(200)
+			.statusCode(OK.getStatusCode())
 			.body("datasize", equalTo(0))
 			.body("iata_freq.BOS", equalTo(1.0f)) 
 			.body("radius_freq", hasSize(101))
@@ -73,7 +74,7 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 		
 		get("/ping")
 			.then().assertThat()
-			.statusCode(200)
+			.statusCode(OK.getStatusCode())
 			.body("datasize", equalTo(0))
 			.body("iata_freq.BOS", equalTo(0.5f)) 
 			.body("iata_freq.JFK", equalTo(0.5f)) 
@@ -92,7 +93,7 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 		
 		get("/ping")
 			.then().assertThat()
-			.statusCode(200)
+			.statusCode(OK.getStatusCode())
 			.body("datasize", equalTo(0))
 			.body("iata_freq.BOS", equalTo(1.0f)) 
 			.body("radius_freq", hasSize(155))
@@ -128,7 +129,6 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 	
 	@BeforeClass
 	public static void setupBasePath() {
-		registerParser("text/plain", Parser.JSON);
 		RestAssured.basePath = "/query";
 	}
 }
