@@ -27,15 +27,17 @@ import com.google.gson.Gson;
 
 @Path("/collect")
 public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
-    
+
+	// TODO
 	private final static Logger LOGGER = Logger.getLogger(RestWeatherCollectorEndpoint.class.getName());
+	private static final int OK = 1;
     
 	private final Gson gson = new Gson();
 	private final AirportRepository airportRepository = AirportRepository.getInstance();
 
     @Override
     public Response ping() {
-        return Response.status(Response.Status.OK).entity(1).build();
+        return Response.status(Response.Status.OK).entity(OK).build();
     }
 
     @Override
@@ -97,7 +99,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
      *
      * @throws WeatherException if the update can not be completed
      */
-    public void addDataPoint(String iataCode, String pointType, DataPoint dp) throws WeatherException {
+    private void addDataPoint(String iataCode, String pointType, DataPoint dp) throws WeatherException {
         Airport airport = airportRepository.findByCode(iataCode);
         updateAtmosphericInformation(airport, pointType, dp);
     }
@@ -109,7 +111,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
      * @param pointType the data point type as a string
      * @param dp the actual data point
      */
-    public void updateAtmosphericInformation(Airport airport, String pointType, DataPoint dp) throws WeatherException {
+    private void updateAtmosphericInformation(Airport airport, String pointType, DataPoint dp) throws WeatherException {
         final DataPointType dptype = DataPointType.valueOf(pointType.toUpperCase());
         AtmosphericInformation ai = airport.getAtmosphericInformation();
         dptype.update(ai, dp);
@@ -124,7 +126,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
      *
      * @return the added airport
      */
-    public Airport addAirport(String iataCode, double latitude, double longitude) {
+    private Airport addAirport(String iataCode, double latitude, double longitude) {
         Airport ad = new Airport();
         ad.setIata(iataCode);
         ad.setLatitude(latitude);

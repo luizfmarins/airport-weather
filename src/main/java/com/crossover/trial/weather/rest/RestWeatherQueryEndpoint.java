@@ -1,10 +1,5 @@
 package com.crossover.trial.weather.rest;
 
-import static com.crossover.trial.weather.repository.InitialAirports.bos;
-import static com.crossover.trial.weather.repository.InitialAirports.ewr;
-import static com.crossover.trial.weather.repository.InitialAirports.jfk;
-import static com.crossover.trial.weather.repository.InitialAirports.lga;
-import static com.crossover.trial.weather.repository.InitialAirports.mmu;
 import static java.util.stream.Collectors.toList;
 import static jersey.repackaged.com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang3.math.NumberUtils.toDouble;
@@ -32,21 +27,15 @@ import com.google.gson.Gson;
 @Path("/query")
 public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
 
-    private static final double MAXIMUN_RADIUS = 1000.0;
+	// TODO 
 	private final static Logger LOGGER = Logger.getLogger("WeatherQuery");
+    private static final double MAXIMUN_RADIUS = 1000.0;
     
 	private final Gson gson = new Gson();
 	private final AirportRepository airportRepository = AirportRepository.getInstance();
-
-    /**
-     * Internal performance counter to better understand most requested information, this map can be improved but
-     * for now provides the basis for future performance optimizations. Due to the stateless deployment architecture
-     * we don't want to write this to disk, but will pull it off using a REST request and aggregate with other
-     * performance metrics {@link #ping()}
-     */
-    public static Map<Airport, Integer> requestFrequency = new HashMap<Airport, Integer>();
+	private final RequestFrequency requestFreq = new RequestFrequency();
+	
     public static Map<Double, Integer> radiusFreq = new HashMap<Double, Integer>();
-    private static int weatherQueryCount = 0;
     
     static {
         init();
@@ -61,7 +50,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
     public String ping() {
         Map<String, Object> retval = new HashMap<>();
         retval.put("datasize", calculateDataSize());
-        retval.put("iata_freq", calculateIataFrequency());
+        retval.put("iata_freq", requestFreq.calculateIataFrequency());
         retval.put("radius_freq", calculateRadiusFrequency());
 
         return gson.toJson(retval);
@@ -82,17 +71,6 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
 		return radiusFreq.keySet().stream()
                 .max(Double::compare)
                 .orElse(MAXIMUN_RADIUS).intValue() + 1;
-	}
-
-	private Map<String, Double> calculateIataFrequency() {
-		Map<String, Double> freq = new HashMap<>();
-
-		for (Airport data : airportRepository.list()) {
-    		double frac = weatherQueryCount == 0 ? 0 : (double) requestFrequency.getOrDefault(data, 0) / weatherQueryCount;
-    		freq.put(data.getIata(), frac);
-        }
-        
-		return freq;
 	}
 
 	long calculateDataSize() {
@@ -146,16 +124,13 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
      * @param radius query radius
      */
     public void updateRequestFrequency(String iata, Double radius) {
-        Airport airportData = airportRepository.findByCode(iata);
-        requestFrequency.put(airportData, requestFrequency.getOrDefault(airportData, 0) + 1);
+        requestFreq.notifyWeatherRequestForAirport(iata);
         radiusFreq.put(radius, radiusFreq.getOrDefault(radius, 0) + 1);
-        weatherQueryCount++;
     }
 
     
     public static void init() {
-        requestFrequency.clear();
+        RequestFrequency.clear();
         radiusFreq.clear();
-        weatherQueryCount = 0;
     }
 }

@@ -1,5 +1,7 @@
 package com.crossover.trial.weather.model;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -69,12 +71,27 @@ public class Airport {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
     }
 
-    public boolean equals(Object other) {
-        if (other instanceof Airport) 
-            return ((Airport)other).getIata().equals(this.getIata());
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((iata == null) ? 0 : iata.hashCode());
+		return result;
+	}
 
-        return false;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+
+		Airport other = (Airport) obj;
+		return Objects.equals(iata, other.iata);
+
+	}
 
 	public boolean isWithinRadius(Airport other, double radius) {
 		if (other == null)
