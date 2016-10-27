@@ -15,12 +15,12 @@ import com.crossover.trial.weather.model.AtmosphericInformation;
 import com.crossover.trial.weather.repository.AirportRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RestWeatherQueryEndpointUnitTest {
+public class WeatherQueryEndpointImplTest {
 
 	@Mock
 	private AtmosphericInformation information;
 	
-	private RestWeatherQueryEndpoint sut = new RestWeatherQueryEndpoint();
+	private WeatherQueryEndpointImpl sut = new WeatherQueryEndpointImpl();
 	private AirportRepository airportRepository = AirportRepository.getInstance();
 	
 	@Test
@@ -60,7 +60,8 @@ public class RestWeatherQueryEndpointUnitTest {
 
 	@Before
 	public void before() {
-		RestWeatherQueryEndpoint.init();
+		WeatherQueryEndpointImpl.init();
+		AirportRepository.clear();
 		addAirport();
 	}
 	

@@ -25,7 +25,7 @@ public abstract class RestTestBase {
 	
 	@Before
 	public void before() {
-		RestWeatherQueryEndpoint.init();
+		WeatherQueryEndpointImpl.init();
 		AirportRepository.clear();
 	}
 	

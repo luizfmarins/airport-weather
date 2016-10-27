@@ -1,5 +1,12 @@
 package com.crossover.trial.weather;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import com.crossover.trial.weather.api.WeatherCollectorEndpoint;
 import com.crossover.trial.weather.api.WeatherQueryEndpoint;
 import com.crossover.trial.weather.model.AtmosphericInformation;
@@ -7,15 +14,10 @@ import com.crossover.trial.weather.model.datapoint.DataPoint;
 import com.crossover.trial.weather.repository.AirportRepository;
 import com.crossover.trial.weather.rest.RestWeatherCollectorEndpoint;
 import com.crossover.trial.weather.rest.RestWeatherQueryEndpoint;
+import com.crossover.trial.weather.rest.WeatherQueryEndpointImpl;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class WeatherEndpointTest {
 
@@ -28,7 +30,7 @@ public class WeatherEndpointTest {
     private DataPoint _dp;
     @Before
     public void setUp() throws Exception {
-        RestWeatherQueryEndpoint.init();
+        WeatherQueryEndpointImpl.init();
         AirportRepository.clear();
         _dp = new DataPoint.Builder()
                 .withCount(10).withFirst(10).withMedian(20).withLast(30).withMean(22).build();
