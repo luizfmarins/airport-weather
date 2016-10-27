@@ -17,6 +17,7 @@ import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.post;
 import static com.jayway.restassured.http.ContentType.JSON;
 import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
@@ -34,6 +35,9 @@ import com.jayway.restassured.RestAssured;
 
 public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 
+	private static final double FLL_LONGITUDE = -74.168667;
+	private static final double FLL_LATITUDE = 40.6925;
+	private static final String FLL = "FLL";
 	private static final double DISTANCE_BOS_EWR = 201d;
 	private static final double DISTANCE_BOS_JFK = 203d;
 	private static final DataPoint EMPTY_DATA_POINT = null;
@@ -176,10 +180,14 @@ public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 	}
 	
 	@Test
-	public void getAirports() {
-		String[] airports = get("/collect/airports").as(String[].class);
+	public void testGetAirports() {
+		String[] airports = getAirports();
 		
 		assertThat(airports, arrayContainingInAnyOrder(EWR, MMU, BOS, LGA, JFK));
+	}
+
+	private String[] getAirports() {
+		return get("/collect/airports").as(String[].class);
 	}
 	
 	@Test
@@ -198,7 +206,32 @@ public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 	
 	@Test
 	public void addAirport_FLL() {
-		addAirport("FLL", 40.6925, -74.168667);
+		addAirport(FLL, FLL_LATITUDE, FLL_LONGITUDE);
+	}
+	
+	@Test
+	public void addAirport_FLL_getAirport() {
+		addAirport(FLL, FLL_LATITUDE, FLL_LONGITUDE);
+		
+		AirportData airport = getAirport(FLL);
+		assertThat(airport.getIata(), equalTo(FLL));
+		assertThat(airport.getLatitude(), equalTo(FLL_LATITUDE));
+		assertThat(airport.getLongitude(), equalTo(FLL_LONGITUDE));
+	}
+	
+	@Test
+	public void addAirport_FLL_getAirports() {
+		addAirport(FLL, FLL_LATITUDE, FLL_LONGITUDE);
+
+		String[] airports = getAirports();
+		
+		assertThat(airports, arrayContainingInAnyOrder(FLL, EWR, MMU, BOS, LGA, JFK));
+	}
+	
+	@Test
+	public void addAirportWithSameName() {
+		post("/collect/airport/" + BOS + "/" + FLL_LATITUDE + "/" + FLL_LONGITUDE)
+			.then().assertThat().statusCode(BAD_REQUEST.getStatusCode());
 	}
 
 	private void addAirport(String iata, double latitude, double longitude) {
