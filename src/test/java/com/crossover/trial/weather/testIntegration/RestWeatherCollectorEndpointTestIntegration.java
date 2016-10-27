@@ -7,6 +7,8 @@ import static com.crossover.trial.weather.DataPointType.WIND;
 import static com.crossover.trial.weather.InitialAirports.BOS;
 import static com.crossover.trial.weather.InitialAirports.EWR;
 import static com.crossover.trial.weather.InitialAirports.JFK;
+import static com.crossover.trial.weather.InitialAirports.LGA;
+import static com.crossover.trial.weather.InitialAirports.MMU;
 import static com.crossover.trial.weather.testIntegration.WeatherQueryUtil.queryWeather;
 import static com.jayway.restassured.RestAssured.get;
 import static com.jayway.restassured.RestAssured.given;
@@ -14,6 +16,7 @@ import static com.jayway.restassured.http.ContentType.JSON;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -23,6 +26,7 @@ import org.junit.Test;
 import com.crossover.trial.weather.AtmosphericInformation;
 import com.crossover.trial.weather.DataPoint;
 import com.crossover.trial.weather.DataPointType;
+import com.crossover.trial.weather.InitialAirports;
 
 public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 
@@ -169,10 +173,9 @@ public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 	
 	@Test
 	public void getAirports() {
-		get("/collect/airports")
-			.then().assertThat()
-			.statusCode(200)
-			.body(equalTo("ready"));
+		String[] airports = get("/collect/airports").as(String[].class);
+		
+		assertThat(airports, arrayContainingInAnyOrder(EWR, MMU, BOS, LGA, JFK));
 	}
 	
 	private void assertQueryPingDatasize(int datasize) {

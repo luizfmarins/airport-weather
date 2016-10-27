@@ -48,9 +48,9 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
     @Override
     public Response getAirports() {
         Set<String> retval = new HashSet<>();
-        for (AirportData ad : airportData) {
+        for (AirportData ad : airportData) 
             retval.add(ad.getIata());
-        }
+
         return Response.status(Response.Status.OK).entity(retval).build();
     }
 
