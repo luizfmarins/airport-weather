@@ -1,4 +1,4 @@
-package com.crossover.trial.weather.testIntegration;
+package com.crossover.trial.weather.rest;
 
 import static com.jayway.restassured.RestAssured.registerParser;
 
@@ -11,7 +11,7 @@ import com.crossover.trial.weather.WeatherServer;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.parsing.Parser;
 
-public abstract class TestBase {
+public abstract class RestTestBase {
 
 	private static WeatherServer server;
 	

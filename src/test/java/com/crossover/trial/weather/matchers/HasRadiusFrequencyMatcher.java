@@ -1,16 +1,16 @@
-package com.crossover.trial.weather.testIntegration;
+package com.crossover.trial.weather.matchers;
 
 import java.util.List;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
-public class HasRadiusFrequency extends BaseMatcher<List<Integer>> {
+public class HasRadiusFrequencyMatcher extends BaseMatcher<List<Integer>> {
 
 	private final int radius;
 	private final int frequency;
 
-	private HasRadiusFrequency(int radius, int frequency) {
+	private HasRadiusFrequencyMatcher(int radius, int frequency) {
 		this.radius = radius;
 		this.frequency = frequency;}
 	
@@ -26,7 +26,7 @@ public class HasRadiusFrequency extends BaseMatcher<List<Integer>> {
 		description.appendText("Expected frequency for radius '" + radius + "': <" + frequency + ">");
 	}
 	
-	public static HasRadiusFrequency hasRadiusFreq(int radius, int frequency) {
-		return new HasRadiusFrequency(radius, frequency);
+	public static HasRadiusFrequencyMatcher hasRadiusFreq(int radius, int frequency) {
+		return new HasRadiusFrequencyMatcher(radius, frequency);
 	}
 }

@@ -1,9 +1,9 @@
-package com.crossover.trial.weather.testIntegration;
+package com.crossover.trial.weather.rest;
 
 import static com.crossover.trial.weather.InitialAirports.BOS;
 import static com.crossover.trial.weather.InitialAirports.JFK;
-import static com.crossover.trial.weather.testIntegration.HasRadiusFrequency.hasRadiusFreq;
-import static com.crossover.trial.weather.testIntegration.WeatherQueryUtil.queryWeather;
+import static com.crossover.trial.weather.matchers.HasRadiusFrequencyMatcher.hasRadiusFreq;
+import static com.crossover.trial.weather.util.rest.RestWeatherQueryUtil.queryWeather;
 import static com.jayway.restassured.RestAssured.get;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -13,16 +13,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.fail;
 
-import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.crossover.trial.weather.AtmosphericInformation;
-import com.crossover.trial.weather.InitialAirports;
-import com.jayway.restassured.RestAssured;
 
-public class RestWeatherQueryEndpointTestIntegration extends TestBase {
+public class RestWeatherQueryEndpointTestIntegration extends RestTestBase {
 
 	private static final String PATH_QUERY_PING = "query/ping";
 	private static final AtmosphericInformation EMPTY_ATMOSPHERIC_INFORMATION = new AtmosphericInformation();
