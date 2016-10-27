@@ -1,11 +1,10 @@
 package com.crossover.trial.weather;
 
-import static jersey.repackaged.com.google.common.base.MoreObjects.toStringHelper;
+import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 import java.util.Objects;
 
-import jersey.repackaged.com.google.common.base.MoreObjects;
-import jersey.repackaged.com.google.common.base.MoreObjects.ToStringHelper;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  * encapsulates sensor information for a particular location
@@ -90,15 +89,7 @@ public class AtmosphericInformation {
     
     @Override
     public String toString() {
-    	return toStringHelper(AtmosphericInformation.class)
-    		.add("temperature", temperature)
-    		.add("wind ", wind)
-    		.add("humidity ", humidity)
-    		.add("precipitation", precipitation)
-    		.add("pressure", pressure)
-    		.add("cloudCover", cloudCover)
-    		.add("lastUpdateTime", lastUpdateTime)
-    		.toString();
+    	return ReflectionToStringBuilder.toString(this, JSON_STYLE);
     }
 
 	@Override
@@ -137,5 +128,55 @@ public class AtmosphericInformation {
 			return false;
 		
 		return true;
+	}
+	
+	public static Builder atmosphericInformationBuilder() {
+		return new Builder();
+	}
+	
+	public static class Builder {
+	
+		private DataPoint temperature; 
+        private DataPoint wind;
+        private DataPoint humidity;
+        private DataPoint precipitation; 
+        private DataPoint pressure;
+        private DataPoint cloudCover;
+         
+        private Builder() {}
+        
+		public Builder withTemperature(DataPoint temperature) {
+			this.temperature = temperature;
+			return this;
+		}
+
+		public Builder withWind(DataPoint wind) {
+			this.wind = wind;
+			return this;
+		}
+
+		public Builder withHumidity(DataPoint humidity) {
+			this.humidity = humidity;
+			return this;
+		}
+
+		public Builder setPrecipitation(DataPoint precipitation) {
+			this.precipitation = precipitation;
+			return this;
+		}
+
+		public Builder withPressure(DataPoint pressure) {
+			this.pressure = pressure;
+			return this;
+		}
+
+		public Builder withCloudCover(DataPoint cloudCover) {
+			this.cloudCover = cloudCover;
+			return this;
+		}
+
+		public AtmosphericInformation build() {
+			return new AtmosphericInformation(temperature, wind, humidity, precipitation, pressure, cloudCover);
+		}
 	}
 }

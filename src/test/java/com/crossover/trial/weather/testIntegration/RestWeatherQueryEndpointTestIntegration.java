@@ -1,29 +1,33 @@
 package com.crossover.trial.weather.testIntegration;
 
 import static com.crossover.trial.weather.InitialAirports.BOS;
+import static com.crossover.trial.weather.InitialAirports.JFK;
 import static com.crossover.trial.weather.testIntegration.HasRadiusFrequency.hasRadiusFreq;
+import static com.crossover.trial.weather.testIntegration.WeatherQueryUtil.queryWeather;
 import static com.jayway.restassured.RestAssured.get;
-import static com.jayway.restassured.RestAssured.registerParser;
+import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static javax.ws.rs.core.Response.Status.*;
 
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.crossover.trial.weather.AtmosphericInformation;
 import com.crossover.trial.weather.InitialAirports;
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.parsing.Parser;
 
 public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 
+	private static final String PATH_QUERY_PING = "query/ping";
 	private static final AtmosphericInformation EMPTY_ATMOSPHERIC_INFORMATION = new AtmosphericInformation();
 
 	@Test
 	public void ping_noPreviousWeatherQueries() {
-		get("/ping")
+		get(PATH_QUERY_PING)
 			.then().assertThat()
 			.statusCode(OK.getStatusCode())
 			.body("datasize", equalTo(0))
@@ -37,9 +41,9 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 	
 	@Test
 	public void ping_oneQueryForBOS_radius0() {
-		get("/weather/" + BOS + "/0");
+		queryWeather(BOS, 0);
 		
-		get("/ping")
+		get(PATH_QUERY_PING)
 			.then().assertThat()
 			.statusCode(OK.getStatusCode())
 			.body("datasize", equalTo(0))
@@ -54,10 +58,10 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 	
 	@Test
 	public void ping_twoQueryForBOS_radius0And100() {
-		get("/weather/" + BOS + "/0");
-		get("/weather/" + BOS + "/100");
+		queryWeather(BOS, 0);
+		queryWeather(BOS, 100);
 		
-		get("/ping")
+		get(PATH_QUERY_PING)
 			.then().assertThat()
 			.statusCode(OK.getStatusCode())
 			.body("datasize", equalTo(0))
@@ -69,10 +73,10 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 	
 	@Test
 	public void ping_oneQueryForBOSradius0_oneQueryForJFKradius100() {
-		get("/weather/" + BOS + "/0");
-		get("/weather/" + InitialAirports.JFK + "/100");
+		queryWeather(BOS, 0);
+		queryWeather(JFK, 100);
 		
-		get("/ping")
+		get(PATH_QUERY_PING)
 			.then().assertThat()
 			.statusCode(OK.getStatusCode())
 			.body("datasize", equalTo(0))
@@ -85,13 +89,13 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 	
 	@Test
 	public void ping_twoQueryForBOS_radius0_100_100_154_154dot85() {
-		get("/weather/" + BOS + "/0");
-		get("/weather/" + BOS + "/100");
-		get("/weather/" + BOS + "/100");
-		get("/weather/" + BOS + "/154");
-		get("/weather/" + BOS + "/154.85");
+		queryWeather(BOS, 0);
+		queryWeather(BOS, 100);
+		queryWeather(BOS, 100);
+		queryWeather(BOS, 154);
+		queryWeather(BOS, 154.85);
 		
-		get("/ping")
+		get(PATH_QUERY_PING)
 			.then().assertThat()
 			.statusCode(OK.getStatusCode())
 			.body("datasize", equalTo(0))
@@ -104,31 +108,23 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 	
 	@Test
 	public void weather_bos_radius0() {
-		AtmosphericInformation[] as = get("/weather/" + BOS + "/0")
-				.as(AtmosphericInformation[].class);
+		AtmosphericInformation[] infos = queryWeather(BOS, 0);
 		
-		assertThat(as.length, equalTo(1));
-		assertThat(as[0], equalTo(EMPTY_ATMOSPHERIC_INFORMATION));
+		assertThat(infos, arrayWithSize(1));
+		assertThat(infos, arrayContaining(EMPTY_ATMOSPHERIC_INFORMATION));
 	}
 	
 	@Test
 	public void weather_bos_noOtherAirportInRadius_bosWithNoInformation() {
-		AtmosphericInformation[] as = get("/weather/" + BOS + "/100")
-				.as(AtmosphericInformation[].class);
+		AtmosphericInformation[] infos = queryWeather(BOS, 100);
 		
-		assertThat(as.length, equalTo(0));
+		assertThat(infos, arrayWithSize(0));
 	}
 	
 	@Test
 	public void weather_bos_noOtherAirportWithInformationInRadius_bosWithNoInformation() {
-		AtmosphericInformation[] as = get("/weather/" + BOS + "/309")
-				.as(AtmosphericInformation[].class);
+		AtmosphericInformation[] infos = queryWeather(BOS, 309);
 		
-		assertThat(as.length, equalTo(0));
-	}
-	
-	@BeforeClass
-	public static void setupBasePath() {
-		RestAssured.basePath = "/query";
+		assertThat(infos, arrayWithSize(0));
 	}
 }

@@ -19,6 +19,7 @@ public abstract class TestBase {
 	public static void beforeClass() {
 		startServer();
 		RestAssured.port = WeatherServer.PORT;
+		RestAssured.defaultParser = Parser.JSON;
 		registerParser("text/plain", Parser.JSON);
 	}
 	

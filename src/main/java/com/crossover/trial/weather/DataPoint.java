@@ -1,7 +1,9 @@
 package com.crossover.trial.weather;
 
+import static java.lang.Double.doubleToLongBits;
+import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
+
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * A collected point, including some information about the range of collected values
@@ -11,16 +13,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class DataPoint {
 
     public double mean = 0.0;
-
     public int first = 0;
-
     public int second = 0;
-
     public int third = 0;
-
     public int count = 0;
 
-    /** private constructor, use the builder to create this object */
     private DataPoint() { }
 
     protected DataPoint(int first, int second, int mean, int third, int count) {
@@ -75,49 +72,102 @@ public class DataPoint {
     }
 
     public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+        return ReflectionToStringBuilder.toString(this, JSON_STYLE);
     }
+    
 
-    public boolean equals(Object that) {
-        return this.toString().equals(that.toString());
-    }
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + count;
+		result = prime * result + first;
+		long temp;
+		temp = Double.doubleToLongBits(mean);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + second;
+		result = prime * result + third;
+		return result;
+	}
 
-    static public class Builder {
-        int first;
-        int mean;
-        int median;
-        int last;
-        int count;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		DataPoint other = (DataPoint) obj;
+		if (count != other.count)
+			return false;
+		if (first != other.first)
+			return false;
+		if (doubleToLongBits(mean) != doubleToLongBits(other.mean))
+			return false;
+		if (second != other.second)
+			return false;
+		if (third != other.third)
+			return false;
+		
+		return true;
+	}
+
+	public static Builder dataPointBuilder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+        private int first;
+        private int second;
+        private int mean;
+        private int median;
+        private int last;
+        private int count;
+		private int third;
 
         public Builder() { }
 
         public Builder withFirst(int first) {
-            first= first;
+            this.first= first;
             return this;
         }
 
         public Builder withMean(int mean) {
-            mean = mean;
+        	this.mean = mean;
             return this;
         }
 
         public Builder withMedian(int median) {
-            median = median;
+        	this.median = median;
             return this;
         }
 
         public Builder withCount(int count) {
-            count = count;
+        	this.count = count;
             return this;
         }
 
         public Builder withLast(int last) {
-            last = last;
+        	this.last = last;
             return this;
         }
+        
+        public Builder withSecond(int second) {
+        	this.second = second;
+        	return this;
+        }
+        
+        public Builder withhird(int third) {
+			this.third = third;
+			return this;
+		}
 
-        public DataPoint build() {
-            return new DataPoint(this.first, this.mean, this.median, this.last, this.count);
+		public DataPoint build() {
+            DataPoint dataPoint = new DataPoint(this.first, this.second, this.mean, this.third, this.count);
+            dataPoint.setMean(mean);
+			return dataPoint;
         }
     }
 }
