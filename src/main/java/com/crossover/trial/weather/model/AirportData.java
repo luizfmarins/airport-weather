@@ -13,13 +13,13 @@ public class AirportData {
 	private static final double EARTH_RADIUS_KM = 6372.8;
 	
     /** the three letter IATA code */
-    String iata;
+    private String iata;
 
     /** latitude value in degrees */
-    double latitude;
+    private double latitude;
 
     /** longitude value in degrees */
-    double longitude;
+    private double longitude;
 
     public AirportData() {}
     
@@ -57,25 +57,24 @@ public class AirportData {
     }
 
     public boolean equals(Object other) {
-        if (other instanceof AirportData) {
+        if (other instanceof AirportData) 
             return ((AirportData)other).getIata().equals(this.getIata());
-        }
 
         return false;
     }
 
 	public boolean isWithinRadius(AirportData other, double radius) {
-		if (calculateDistance(this, other) <= radius) {
-			return true;
-		}
-		return false;
+		if (other == null)
+			return false;
+		
+		return calculateDistance(other) <= radius; 
 	}
 	
-	private double calculateDistance(AirportData ad1, AirportData ad2) {
-        double deltaLat = Math.toRadians(ad2.getLatitude() - ad1.getLatitude());
-        double deltaLon = Math.toRadians(ad2.getLongitude() - ad1.getLongitude());
+	private double calculateDistance(AirportData ad2) {
+        double deltaLat = Math.toRadians(ad2.getLatitude() - getLatitude());
+        double deltaLon = Math.toRadians(ad2.getLongitude() - getLongitude());
         double a =  Math.pow(Math.sin(deltaLat / 2), 2) + Math.pow(Math.sin(deltaLon / 2), 2)
-                * Math.cos(ad1.getLatitude()) * Math.cos(ad2.getLatitude());
+                * Math.cos(getLatitude()) * Math.cos(ad2.getLatitude());
         double c = 2 * Math.asin(Math.sqrt(a));
         return EARTH_RADIUS_KM * c;
     }
