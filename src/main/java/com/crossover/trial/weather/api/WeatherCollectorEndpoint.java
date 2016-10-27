@@ -1,4 +1,4 @@
-package com.crossover.trial.weather;
+package com.crossover.trial.weather.api;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -6,6 +6,9 @@ import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.crossover.trial.weather.model.AirportData;
+import com.crossover.trial.weather.model.DataPointType;
 
 /**
  * The interface shared to airport weather collection systems.

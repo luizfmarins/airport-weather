@@ -4,8 +4,8 @@ import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.http.ContentType.JSON;
 import static javax.ws.rs.core.Response.Status.OK;
 
-import com.crossover.trial.weather.DataPoint;
-import com.crossover.trial.weather.DataPointType;
+import com.crossover.trial.weather.model.DataPoint;
+import com.crossover.trial.weather.model.DataPointType;
 
 public final class RestWeatherCollectorUtil {
 

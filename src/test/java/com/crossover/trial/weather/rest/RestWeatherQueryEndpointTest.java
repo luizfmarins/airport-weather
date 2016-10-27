@@ -1,8 +1,8 @@
 package com.crossover.trial.weather.rest;
 
-import static com.crossover.trial.weather.InitialAirports.BOS;
-import static com.crossover.trial.weather.InitialAirports.JFK;
 import static com.crossover.trial.weather.matchers.HasRadiusFrequencyMatcher.hasRadiusFreq;
+import static com.crossover.trial.weather.rest.InitialAirports.BOS;
+import static com.crossover.trial.weather.rest.InitialAirports.JFK;
 import static com.crossover.trial.weather.util.rest.RestWeatherQueryUtil.queryWeather;
 import static com.jayway.restassured.RestAssured.get;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -15,7 +15,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.crossover.trial.weather.AtmosphericInformation;
+import com.crossover.trial.weather.model.AtmosphericInformation;
 
 public class RestWeatherQueryEndpointTest extends RestTestBase {
 

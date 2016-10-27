@@ -1,12 +1,12 @@
 package com.crossover.trial.weather.rest;
 
-import static com.crossover.trial.weather.AtmosphericInformation.atmosphericInformationBuilder;
-import static com.crossover.trial.weather.DataPointType.CLOUDCOVER;
-import static com.crossover.trial.weather.DataPointType.PRESSURE;
-import static com.crossover.trial.weather.DataPointType.WIND;
-import static com.crossover.trial.weather.InitialAirports.BOS;
-import static com.crossover.trial.weather.InitialAirports.EWR;
-import static com.crossover.trial.weather.InitialAirports.JFK;
+import static com.crossover.trial.weather.model.AtmosphericInformation.atmosphericInformationBuilder;
+import static com.crossover.trial.weather.model.DataPointType.CLOUDCOVER;
+import static com.crossover.trial.weather.model.DataPointType.PRESSURE;
+import static com.crossover.trial.weather.model.DataPointType.WIND;
+import static com.crossover.trial.weather.rest.InitialAirports.BOS;
+import static com.crossover.trial.weather.rest.InitialAirports.EWR;
+import static com.crossover.trial.weather.rest.InitialAirports.JFK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.arrayWithSize;
@@ -17,8 +17,8 @@ import static com.crossover.trial.weather.util.rest.RestWeatherQueryUtil.queryWe
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import com.crossover.trial.weather.AtmosphericInformation;
-import com.crossover.trial.weather.DataPoint;
+import com.crossover.trial.weather.model.AtmosphericInformation;
+import com.crossover.trial.weather.model.DataPoint;
 
 public class RestUpdateAndQueryWeatherTest extends RestTestBase {
 	

@@ -6,8 +6,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import com.crossover.trial.weather.RestWeatherQueryEndpoint;
-import com.crossover.trial.weather.WeatherServer;
+import com.crossover.trial.weather.main.WeatherServer;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.parsing.Parser;
 
@@ -25,16 +24,12 @@ public abstract class RestTestBase {
 	
 	@Before
 	public void before() {
-		cleanup();
+		RestWeatherQueryEndpoint.init();
 	}
 	
 	@AfterClass
 	public static void afterClass() {
 		server.shutdown();
-	}
-	
-	private void cleanup() {
-		RestWeatherQueryEndpoint.cleanup();
 	}
 	
 	private static void startServer() {

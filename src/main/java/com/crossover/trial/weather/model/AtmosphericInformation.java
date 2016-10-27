@@ -1,4 +1,4 @@
-package com.crossover.trial.weather;
+package com.crossover.trial.weather.model;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
@@ -80,10 +80,10 @@ public class AtmosphericInformation {
     public void setCloudCover(DataPoint cloudCover) {
         this.cloudCover = cloudCover;
     }
-    protected long getLastUpdateTime() {
+    public long getLastUpdateTime() {
         return this.lastUpdateTime;
     }
-    protected void setLastUpdateTime(long lastUpdateTime) {
+    public void setLastUpdateTime(long lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
     }
     

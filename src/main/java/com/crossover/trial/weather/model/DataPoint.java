@@ -1,4 +1,4 @@
-package com.crossover.trial.weather;
+package com.crossover.trial.weather.model;
 
 import static java.lang.Double.doubleToLongBits;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
@@ -33,7 +33,9 @@ public class DataPoint {
         return mean;
     }
 
-    protected void setMean(double mean) { this.mean = mean; }
+    public void setMean(double mean) { 
+    	this.mean = mean; 
+    }
 
     /** 1st quartile -- useful as a lower bound */
     public int getFirst() {

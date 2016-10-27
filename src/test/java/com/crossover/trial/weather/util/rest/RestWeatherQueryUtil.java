@@ -2,7 +2,7 @@ package com.crossover.trial.weather.util.rest;
 
 import static com.jayway.restassured.RestAssured.get;
 
-import com.crossover.trial.weather.AtmosphericInformation;
+import com.crossover.trial.weather.model.AtmosphericInformation;
 
 public final class RestWeatherQueryUtil {
 

@@ -1,4 +1,6 @@
-package com.crossover.trial.weather;
+package com.crossover.trial.weather.rest;
+
+import com.crossover.trial.weather.model.AirportData;
 
 public final class InitialAirports {
 

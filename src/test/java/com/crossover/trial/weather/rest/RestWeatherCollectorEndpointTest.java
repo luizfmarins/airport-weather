@@ -1,13 +1,13 @@
 package com.crossover.trial.weather.rest;
 
-import static com.crossover.trial.weather.DataPointType.WIND;
-import static com.crossover.trial.weather.InitialAirports.BOS;
-import static com.crossover.trial.weather.InitialAirports.EWR;
-import static com.crossover.trial.weather.InitialAirports.JFK;
-import static com.crossover.trial.weather.InitialAirports.LGA;
-import static com.crossover.trial.weather.InitialAirports.MMU;
-import static com.crossover.trial.weather.InitialAirports.bos;
-import static com.crossover.trial.weather.InitialAirports.mmu;
+import static com.crossover.trial.weather.model.DataPointType.WIND;
+import static com.crossover.trial.weather.rest.InitialAirports.BOS;
+import static com.crossover.trial.weather.rest.InitialAirports.EWR;
+import static com.crossover.trial.weather.rest.InitialAirports.JFK;
+import static com.crossover.trial.weather.rest.InitialAirports.LGA;
+import static com.crossover.trial.weather.rest.InitialAirports.MMU;
+import static com.crossover.trial.weather.rest.InitialAirports.bos;
+import static com.crossover.trial.weather.rest.InitialAirports.mmu;
 import static com.crossover.trial.weather.util.DataPointUtil.windDatapoint;
 import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.updateWeather;
 import static com.jayway.restassured.RestAssured.get;
@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Test;
 
-import com.crossover.trial.weather.AirportData;
+import com.crossover.trial.weather.model.AirportData;
 
 public class RestWeatherCollectorEndpointTest extends RestTestBase {
 

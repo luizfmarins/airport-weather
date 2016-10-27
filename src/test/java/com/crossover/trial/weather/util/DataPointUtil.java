@@ -1,6 +1,6 @@
 package com.crossover.trial.weather.util;
 
-import com.crossover.trial.weather.DataPoint;
+import com.crossover.trial.weather.model.DataPoint;
 
 public final class DataPointUtil {
 
