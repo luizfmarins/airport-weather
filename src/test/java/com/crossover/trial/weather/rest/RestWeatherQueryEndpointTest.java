@@ -104,11 +104,6 @@ public class RestWeatherQueryEndpointTest extends RestTestBase {
 	}
 	
 	@Test
-	public void ping_atmosphericInformationUpdatedInMoreThenADay_doesnCount() {
-		fail("Not implemented!");
-	}
-	
-	@Test
 	public void weather_bos_radius0() {
 		AtmosphericInformation[] infos = queryWeather(BOS, 0);
 		
