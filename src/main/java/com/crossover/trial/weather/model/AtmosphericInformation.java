@@ -6,9 +6,12 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * encapsulates sensor information for a particular location
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AtmosphericInformation {
 
     /** temperature in degrees celsius */
@@ -128,6 +131,19 @@ public class AtmosphericInformation {
 			return false;
 		
 		return true;
+	}
+	
+	public boolean hasInformation() {
+		return getCloudCover() != null 
+				|| getHumidity() != null 
+				|| getPressure() != null 
+				|| getPrecipitation() != null
+				|| getTemperature() != null 
+				|| getWind() != null;
+	}
+
+	public boolean isUpdatedInTheLastDay() {
+		return getLastUpdateTime() > System.currentTimeMillis() - 86400000;
 	}
 	
 	public static Builder atmosphericInformationBuilder() {

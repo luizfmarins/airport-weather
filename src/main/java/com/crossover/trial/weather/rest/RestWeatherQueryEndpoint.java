@@ -1,7 +1,12 @@
 package com.crossover.trial.weather.rest;
 
-import static com.crossover.trial.weather.rest.InitialAirports.*;
+import static com.crossover.trial.weather.rest.InitialAirports.bos;
+import static com.crossover.trial.weather.rest.InitialAirports.ewr;
+import static com.crossover.trial.weather.rest.InitialAirports.jfk;
+import static com.crossover.trial.weather.rest.InitialAirports.lga;
+import static com.crossover.trial.weather.rest.InitialAirports.mmu;
 import static com.crossover.trial.weather.rest.RestWeatherCollectorEndpoint.addAirport;
+import static jersey.repackaged.com.google.common.collect.Lists.newArrayList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +17,8 @@ import java.util.logging.Logger;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
+
+import org.apache.commons.lang3.math.NumberUtils;
 
 import com.crossover.trial.weather.api.WeatherQueryEndpoint;
 import com.crossover.trial.weather.model.AirportData;
@@ -27,7 +34,8 @@ import com.google.gson.Gson;
 @Path("/query")
 public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
 
-    private final static Logger LOGGER = Logger.getLogger("WeatherQuery");
+    private static final double MAXIMUN_RADIUS = 1000.0;
+	private final static Logger LOGGER = Logger.getLogger("WeatherQuery");
     private static final double EARTH_RADIUS_KM = 6372.8;
     private static final Gson gson = new Gson();
 
@@ -59,45 +67,47 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
     @Override
     public String ping() {
         Map<String, Object> retval = new HashMap<>();
-
-        int datasize = 0;
-        for (AtmosphericInformation ai : atmosphericInformation) {
-            // we only count recent readings
-            if (ai.getCloudCover() != null
-                || ai.getHumidity() != null
-                || ai.getPressure() != null
-                || ai.getPrecipitation() != null
-                || ai.getTemperature() != null
-                || ai.getWind() != null) {
-                // updated in the last day
-                if (ai.getLastUpdateTime() > System.currentTimeMillis() - 86400000) {
-                    datasize++;
-                }
-            }
-        }
-        retval.put("datasize", datasize);
-
-        Map<String, Double> freq = new HashMap<>();
-        // fraction of queries
-        for (AirportData data : airportData) {
-    		double frac = weatherQueryCount == 0 ? 0 : (double)requestFrequency.getOrDefault(data, 0) / weatherQueryCount;
-    		freq.put(data.getIata(), frac);
-        }
-        retval.put("iata_freq", freq);
-
-        int m = radiusFreq.keySet().stream()
-                .max(Double::compare)
-                .orElse(1000.0).intValue() + 1;
-
-        int[] hist = new int[m];
-        for (Map.Entry<Double, Integer> e : radiusFreq.entrySet()) {
-            int i = e.getKey().intValue();
-            hist[i] += e.getValue();
-        }
-        retval.put("radius_freq", hist);
+        retval.put("datasize", calculateDataSize());
+        retval.put("iata_freq", calculateIataFrequency());
+        retval.put("radius_freq", calculateRadiusFrequency());
 
         return gson.toJson(retval);
     }
+
+	private int[] calculateRadiusFrequency() {
+		int[] frequencies = new int[radiusFrequencySize()];
+		
+        for (Map.Entry<Double, Integer> e : radiusFreq.entrySet()) {
+            int frequencyIndex = e.getKey().intValue();
+            frequencies[frequencyIndex] += e.getValue();
+        }
+        
+		return frequencies;
+	}
+
+	private int radiusFrequencySize() {
+		return radiusFreq.keySet().stream()
+                .max(Double::compare)
+                .orElse(MAXIMUN_RADIUS).intValue() + 1;
+	}
+
+	private Map<String, Double> calculateIataFrequency() {
+		Map<String, Double> freq = new HashMap<>();
+
+		for (AirportData data : airportData) {
+    		double frac = weatherQueryCount == 0 ? 0 : requestFrequency.getOrDefault(data, 0) / weatherQueryCount;
+    		freq.put(data.getIata(), frac);
+        }
+        
+		return freq;
+	}
+
+	long calculateDataSize() {
+		long datasize = atmosphericInformation.stream()
+			.filter(ai -> ai.hasInformation() && ai.isUpdatedInTheLastDay())
+			.count();
+		return datasize;
+	}
 
     /**
      * Given a query in json format {'iata': CODE, 'radius': km} extracts the requested airport information and
@@ -110,27 +120,30 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
      */
     @Override
     public Response weather(String iata, String radiusString) {
-        double radius = radiusString == null || radiusString.trim().isEmpty() ? 0 : Double.valueOf(radiusString);
+        double radius = NumberUtils.toDouble(radiusString, 0);
         updateRequestFrequency(iata, radius);
 
-        List<AtmosphericInformation> retval = new ArrayList<>();
-        if (radius == 0) {
-            int idx = getAirportDataIdx(iata);
-            retval.add(atmosphericInformation.get(idx));
-        } else {
-            AirportData ad = findAirportData(iata);
-            for (int i=0;i< airportData.size(); i++){
-                if (calculateDistance(ad, airportData.get(i)) <= radius){
-                    AtmosphericInformation ai = atmosphericInformation.get(i);
-                    if (ai.getCloudCover() != null || ai.getHumidity() != null || ai.getPrecipitation() != null
-                       || ai.getPressure() != null || ai.getTemperature() != null || ai.getWind() != null){
-                        retval.add(ai);
-                    }
-                }
-            }
-        }
+        List<AtmosphericInformation> retval = getAtmosphericInformation(iata, radius);
         return Response.status(Response.Status.OK).entity(retval).build();
     }
+
+	private List<AtmosphericInformation> getAtmosphericInformation(String iata, double radius) {
+        if (radius == 0) {
+            int idx = getAirportDataIdx(iata);
+            return newArrayList(atmosphericInformation.get(idx));
+        } 
+        
+        List<AtmosphericInformation> retval = new ArrayList<>();
+        AirportData ad = findAirportData(iata);
+        for (int i=0; i< airportData.size(); i++){
+            if (calculateDistance(ad, airportData.get(i)) <= radius){
+                AtmosphericInformation ai = atmosphericInformation.get(i);
+                if (ai.hasInformation())
+                    retval.add(ai);
+            }
+        }
+		return retval;
+	}
 
 
     /**
