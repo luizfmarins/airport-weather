@@ -1,40 +1,28 @@
 package com.crossover.trial.weather.repository;
 
-import static java.util.stream.Collectors.toList;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.crossover.trial.weather.model.Airport;
 
-public class AirportRepository {
+public abstract class AirportRepository {
 
 	private static AirportRepository instance;
 
-	protected static Map<String, Airport> airports = new HashMap<>();
+	public abstract List<Airport> list();
 	
-	private AirportRepository() {}
+	public abstract Airport findByCode(String iataCode);
 	
-	public List<Airport> list() {
-		return airports.values().stream().collect(toList());
-	}
+	public abstract void save(Airport airport);
 	
-	public Airport findByCode(String iataCode) {
-        return airports.get(iataCode);
-    }
-	
-	public void save(Airport airport) {
-		airports.put(airport.getIata(), airport);
-	}
+	protected abstract void doClear();
 
 	public static AirportRepository getInstance() {
 		if (instance == null)
-			instance = new AirportRepository();
+			instance = new MemoryAirportRepository();
 		return instance;
 	}
 	
 	public static void clear() {
-		airports.clear();
+		instance.doClear();
 	}
 }
