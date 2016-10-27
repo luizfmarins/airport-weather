@@ -17,7 +17,7 @@ import org.junit.Test;
 
 import com.crossover.trial.weather.AtmosphericInformation;
 
-public class RestWeatherQueryEndpointTestIntegration extends RestTestBase {
+public class RestWeatherQueryEndpointTest extends RestTestBase {
 
 	private static final String PATH_QUERY_PING = "query/ping";
 	private static final AtmosphericInformation EMPTY_ATMOSPHERIC_INFORMATION = new AtmosphericInformation();

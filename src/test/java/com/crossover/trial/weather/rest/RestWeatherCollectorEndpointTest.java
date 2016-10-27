@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import com.crossover.trial.weather.AirportData;
 
-public class RestWeatherCollectorEndpointTestIntegration extends RestTestBase {
+public class RestWeatherCollectorEndpointTest extends RestTestBase {
 
 	private static final double FLL_LONGITUDE = -74.168667;
 	private static final double FLL_LATITUDE = 40.6925;
