@@ -56,16 +56,14 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
 
 
     @Override
-    public Response getAirport(@PathParam("iata") String iata) {
+    public Response getAirport(String iata) {
         AirportData ad = findAirportData(iata);
         return Response.status(Response.Status.OK).entity(ad).build();
     }
 
 
     @Override
-    public Response addAirport(@PathParam("iata") String iata,
-                               @PathParam("lat") String latString,
-                               @PathParam("long") String longString) {
+    public Response addAirport(String iata, String latString, String longString) {
         addAirport(iata, Double.valueOf(latString), Double.valueOf(longString));
         return Response.status(Response.Status.OK).build();
     }

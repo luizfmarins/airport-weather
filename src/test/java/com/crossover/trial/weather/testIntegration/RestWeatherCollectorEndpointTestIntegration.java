@@ -9,9 +9,12 @@ import static com.crossover.trial.weather.InitialAirports.EWR;
 import static com.crossover.trial.weather.InitialAirports.JFK;
 import static com.crossover.trial.weather.InitialAirports.LGA;
 import static com.crossover.trial.weather.InitialAirports.MMU;
+import static com.crossover.trial.weather.InitialAirports.bos;
+import static com.crossover.trial.weather.InitialAirports.mmu;
 import static com.crossover.trial.weather.testIntegration.WeatherQueryUtil.queryWeather;
 import static com.jayway.restassured.RestAssured.get;
 import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.post;
 import static com.jayway.restassured.http.ContentType.JSON;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,10 +26,11 @@ import static org.hamcrest.Matchers.equalTo;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
+import com.crossover.trial.weather.AirportData;
 import com.crossover.trial.weather.AtmosphericInformation;
 import com.crossover.trial.weather.DataPoint;
 import com.crossover.trial.weather.DataPointType;
-import com.crossover.trial.weather.InitialAirports;
+import com.jayway.restassured.RestAssured;
 
 public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 
@@ -176,6 +180,35 @@ public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 		String[] airports = get("/collect/airports").as(String[].class);
 		
 		assertThat(airports, arrayContainingInAnyOrder(EWR, MMU, BOS, LGA, JFK));
+	}
+	
+	@Test
+	public void getAirport_BOS() {
+		AirportData airport = getAirport(BOS);
+		
+		assertThat(airport, equalTo(bos()));
+	}
+	
+	@Test
+	public void getAirport_MMU() {
+		AirportData airport = getAirport(MMU);
+		
+		assertThat(airport, equalTo(mmu()));
+	}
+	
+	@Test
+	public void addAirport_FLL() {
+		addAirport("FLL", 40.6925, -74.168667);
+	}
+
+	private void addAirport(String iata, double latitude, double longitude) {
+		post("/collect/airport/" + iata + "/" + latitude + "/" + longitude)
+			.then().assertThat().statusCode(OK.getStatusCode());
+		
+	}
+
+	private AirportData getAirport(String airportName) {
+		return get("/collect/airport/" + airportName).as(AirportData.class);
 	}
 	
 	private void assertQueryPingDatasize(int datasize) {

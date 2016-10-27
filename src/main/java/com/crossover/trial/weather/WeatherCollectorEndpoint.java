@@ -74,7 +74,7 @@ public interface WeatherCollectorEndpoint {
     Response addAirport(@PathParam("iata") String iata,
                         @PathParam("lat") String latString,
                         @PathParam("long") String longString);
-
+    
     /**
      * Remove an airport from the known airport list
      *
