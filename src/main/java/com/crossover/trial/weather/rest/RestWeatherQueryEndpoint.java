@@ -36,7 +36,6 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
 
     private static final double MAXIMUN_RADIUS = 1000.0;
 	private final static Logger LOGGER = Logger.getLogger("WeatherQuery");
-    private static final double EARTH_RADIUS_KM = 6372.8;
     private static final Gson gson = new Gson();
 
     /** all known airports */
@@ -123,8 +122,9 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         double radius = NumberUtils.toDouble(radiusString, 0);
         updateRequestFrequency(iata, radius);
 
-        List<AtmosphericInformation> retval = getAtmosphericInformation(iata, radius);
-        return Response.status(Response.Status.OK).entity(retval).build();
+        return Response.status(Response.Status.OK)
+        		.entity(getAtmosphericInformation(iata, radius))
+        		.build();
     }
 
 	private List<AtmosphericInformation> getAtmosphericInformation(String iata, double radius) {
@@ -136,12 +136,13 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         List<AtmosphericInformation> retval = new ArrayList<>();
         AirportData ad = findAirportData(iata);
         for (int i=0; i< airportData.size(); i++){
-            if (calculateDistance(ad, airportData.get(i)) <= radius){
+            if (ad.isWithinRadius(airportData.get(i), radius)) {
                 AtmosphericInformation ai = atmosphericInformation.get(i);
                 if (ai.hasInformation())
                     retval.add(ai);
             }
         }
+        
 		return retval;
 	}
 
@@ -180,22 +181,6 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
     public static int getAirportDataIdx(String iataCode) {
         AirportData ad = findAirportData(iataCode);
         return airportData.indexOf(ad);
-    }
-
-    /**
-     * Haversine distance between two airports.
-     *
-     * @param ad1 airport 1
-     * @param ad2 airport 2
-     * @return the distance in KM
-     */
-    public double calculateDistance(AirportData ad1, AirportData ad2) {
-        double deltaLat = Math.toRadians(ad2.getLatitude() - ad1.getLatitude());
-        double deltaLon = Math.toRadians(ad2.getLongitude() - ad1.getLongitude());
-        double a =  Math.pow(Math.sin(deltaLat / 2), 2) + Math.pow(Math.sin(deltaLon / 2), 2)
-                * Math.cos(ad1.getLatitude()) * Math.cos(ad2.getLatitude());
-        double c = 2 * Math.asin(Math.sqrt(a));
-        return EARTH_RADIUS_KM * c;
     }
 
     /**
