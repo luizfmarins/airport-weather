@@ -23,6 +23,6 @@ public abstract class AirportRepository {
 	}
 	
 	public static void clear() {
-		instance.doClear();
+		getInstance().doClear();
 	}
 }

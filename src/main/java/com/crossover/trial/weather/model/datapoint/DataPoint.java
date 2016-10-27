@@ -18,7 +18,7 @@ public class DataPoint {
     public int third = 0;
     public int count = 0;
 
-    private DataPoint() { }
+    private DataPoint() {}
 
     protected DataPoint(int first, int second, int mean, int third, int count) {
         this.setFirst(first);
