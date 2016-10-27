@@ -28,13 +28,12 @@ public class RestWeatherCollectorEndpointTest extends RestTestBase {
 	private static final double FLL_LATITUDE = 40.6925;
 	private static final String FLL = "FLL";
 
-	// TODO According to the javadoc shoud reurn 1
 	@Test
 	public void ping() throws Exception {
 		get("/collect/ping")
 			.then().assertThat()
 				.statusCode(200)
-				.body(equalTo("ready"));
+				.body(equalTo("1"));
 	}
 	
 	@Test

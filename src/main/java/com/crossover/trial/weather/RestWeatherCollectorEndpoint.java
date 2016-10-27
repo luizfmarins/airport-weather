@@ -31,7 +31,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
 
     @Override
     public Response ping() {
-        return Response.status(Response.Status.OK).entity("ready").build();
+        return Response.status(Response.Status.OK).entity(1).build();
     }
 
     @Override
