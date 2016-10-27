@@ -30,7 +30,7 @@ public class RequestFrequency {
 		return freq;
 	}
     
-    public void notifyWeatherRequestForAirport(String iata) {
+    public void notifyWeatherRequest(String iata) {
     	Airport airport = airportRepository.findByCode(iata);
     	requestFrequency.put(airport, requestFrequency.getOrDefault(airport, 0) + 1);
     	weatherQueryCount++;

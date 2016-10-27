@@ -29,14 +29,12 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
 
 	// TODO 
 	private final static Logger LOGGER = Logger.getLogger("WeatherQuery");
-    private static final double MAXIMUN_RADIUS = 1000.0;
     
 	private final Gson gson = new Gson();
 	private final AirportRepository airportRepository = AirportRepository.getInstance();
 	private final RequestFrequency requestFreq = new RequestFrequency();
+	private final RadiusFrequency radiusFreq = new RadiusFrequency();
 	
-    public static Map<Double, Integer> radiusFreq = new HashMap<Double, Integer>();
-    
     static {
         init();
     }
@@ -51,38 +49,10 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         Map<String, Object> retval = new HashMap<>();
         retval.put("datasize", calculateDataSize());
         retval.put("iata_freq", requestFreq.calculateIataFrequency());
-        retval.put("radius_freq", calculateRadiusFrequency());
+        retval.put("radius_freq", radiusFreq.calculateRadiusFrequency());
 
         return gson.toJson(retval);
     }
-
-	private int[] calculateRadiusFrequency() {
-		int[] frequencies = new int[radiusFrequencySize()];
-		
-        for (Map.Entry<Double, Integer> e : radiusFreq.entrySet()) {
-            int frequencyIndex = e.getKey().intValue();
-            frequencies[frequencyIndex] += e.getValue();
-        }
-        
-		return frequencies;
-	}
-
-	private int radiusFrequencySize() {
-		return radiusFreq.keySet().stream()
-                .max(Double::compare)
-                .orElse(MAXIMUN_RADIUS).intValue() + 1;
-	}
-
-	long calculateDataSize() {
-		List<AtmosphericInformation> atmosphericInformation = airportRepository.list().stream()
-			.map(ap -> ap.getAtmosphericInformation())
-			.collect(toList());
-		
-		long datasize = atmosphericInformation.stream()
-			.filter(ai -> ai.hasInformation() && ai.isUpdatedInTheLastDay())
-			.count();
-		return datasize;
-	}
 
     /**
      * Given a query in json format {'iata': CODE, 'radius': km} extracts the requested airport information and
@@ -101,6 +71,17 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         
 		return Response.status(Response.Status.OK).entity(atmosphericInformation).build();
     }
+    
+	long calculateDataSize() {
+		List<AtmosphericInformation> atmosphericInformation = airportRepository.list().stream()
+			.map(ap -> ap.getAtmosphericInformation())
+			.collect(toList());
+		
+		long datasize = atmosphericInformation.stream()
+			.filter(ai -> ai.hasInformation() && ai.isUpdatedInTheLastDay())
+			.count();
+		return datasize;
+	}
 
 	private List<AtmosphericInformation> getAtmosphericInformation(String iata, double radius) {
         Airport airport = airportRepository.findByCode(iata);
@@ -116,21 +97,13 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
 		return retval;
 	}
 
-
-    /**
-     * Records information about how often requests are made
-     *
-     * @param iata an iata code
-     * @param radius query radius
-     */
-    public void updateRequestFrequency(String iata, Double radius) {
-        requestFreq.notifyWeatherRequestForAirport(iata);
-        radiusFreq.put(radius, radiusFreq.getOrDefault(radius, 0) + 1);
+    private void updateRequestFrequency(String iata, Double radius) {
+        requestFreq.notifyWeatherRequest(iata);
+        radiusFreq.notifyWeatherRequest(radius);
     }
-
     
     public static void init() {
         RequestFrequency.clear();
-        radiusFreq.clear();
+        RadiusFrequency.clear();
     }
 }
