@@ -174,7 +174,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
         AirportData ad = new AirportData();
         ad.setIata(iataCode);
         ad.setLatitude(latitude);
-        ad.setLatitude(longitude);
+        ad.setLongitude(longitude);
         addAirport(ad);
         return ad;
     }

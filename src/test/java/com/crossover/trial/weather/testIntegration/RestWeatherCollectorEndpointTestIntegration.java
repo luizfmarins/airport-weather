@@ -26,8 +26,8 @@ import com.crossover.trial.weather.DataPointType;
 
 public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 
-	private static final double DISTANCE_BOS_EWR = 352d;
-	private static final double DISTANCE_BOS_JFK = 309;
+	private static final double DISTANCE_BOS_EWR = 201d;
+	private static final double DISTANCE_BOS_JFK = 203d;
 	private static final DataPoint EMPTY_DATA_POINT = null;
 
 	// TODO According to the javadoc shoud reurn 1
@@ -129,19 +129,19 @@ public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 	@Test
 	public void updateBOSWind_EWRCloudOver_queryWeather_withEWRInRadius() {
 		updateWeather(BOS, WIND, windDatapoint());
-		updateWeather(EWR, CLOUDCOVER, cloudOverDatapoint());
+		updateWeather(JFK, PRESSURE, pressureDatapoint());
 		
-		AtmosphericInformation[] infos = queryWeather(BOS, DISTANCE_BOS_EWR);
+		AtmosphericInformation[] infos = queryWeather(BOS, DISTANCE_BOS_JFK);
 		
 		assertThat(infos, arrayWithSize(2));
 		assertThat(infos, Matchers.arrayContainingInAnyOrder(
 				atmosphericInformationBuilder()
 					.withWind(windDatapoint())
-					.withCloudCover(EMPTY_DATA_POINT)
+					.withPressure(EMPTY_DATA_POINT)
 					.build(),
 				atmosphericInformationBuilder()
 					.withWind(EMPTY_DATA_POINT)
-					.withCloudCover(cloudOverDatapoint())
+					.withPressure(pressureDatapoint())
 					.build()));
 	}
 	
@@ -151,7 +151,7 @@ public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 		updateWeather(EWR, CLOUDCOVER, cloudOverDatapoint());
 		updateWeather(JFK, PRESSURE, pressureDatapoint());
 		
-		AtmosphericInformation[] infos = queryWeather(BOS, DISTANCE_BOS_JFK);
+		AtmosphericInformation[] infos = queryWeather(BOS, DISTANCE_BOS_EWR);
 		
 		assertThat(infos, arrayWithSize(2));
 		assertThat(infos, Matchers.arrayContainingInAnyOrder(
@@ -162,8 +162,8 @@ public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 					.build(),
 				atmosphericInformationBuilder()
 					.withWind(EMPTY_DATA_POINT)
-					.withCloudCover(EMPTY_DATA_POINT)
-					.withPressure(pressureDatapoint())
+					.withCloudCover(cloudOverDatapoint())
+					.withPressure(EMPTY_DATA_POINT)
 					.build()));
 	}
 	
