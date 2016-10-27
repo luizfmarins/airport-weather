@@ -19,7 +19,6 @@ public class RequestFrequency {
     
     private AirportRepository airportRepository = AirportRepository.getInstance();
     
-    // TODO Is this the expected behavior? Or is just a count for each airport?
     public Map<String, Double> calculateIataFrequency() {
 		Map<String, Double> freq = new HashMap<>();
 
