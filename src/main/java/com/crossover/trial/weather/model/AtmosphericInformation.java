@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import com.crossover.trial.weather.model.datapoint.DataPoint;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**

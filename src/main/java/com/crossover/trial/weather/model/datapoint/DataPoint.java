@@ -1,4 +1,4 @@
-package com.crossover.trial.weather.model;
+package com.crossover.trial.weather.model.datapoint;
 
 import static java.lang.Double.doubleToLongBits;
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;

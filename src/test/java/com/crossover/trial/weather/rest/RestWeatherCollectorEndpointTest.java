@@ -1,6 +1,6 @@
 package com.crossover.trial.weather.rest;
 
-import static com.crossover.trial.weather.model.DataPointType.WIND;
+import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.WIND;
 import static com.crossover.trial.weather.rest.InitialAirports.BOS;
 import static com.crossover.trial.weather.rest.InitialAirports.EWR;
 import static com.crossover.trial.weather.rest.InitialAirports.JFK;

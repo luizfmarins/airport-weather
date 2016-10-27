@@ -3,7 +3,7 @@ package com.crossover.trial.weather;
 import com.crossover.trial.weather.api.WeatherCollectorEndpoint;
 import com.crossover.trial.weather.api.WeatherQueryEndpoint;
 import com.crossover.trial.weather.model.AtmosphericInformation;
-import com.crossover.trial.weather.model.DataPoint;
+import com.crossover.trial.weather.model.datapoint.DataPoint;
 import com.crossover.trial.weather.rest.RestWeatherCollectorEndpoint;
 import com.crossover.trial.weather.rest.RestWeatherQueryEndpoint;
 import com.google.gson.Gson;

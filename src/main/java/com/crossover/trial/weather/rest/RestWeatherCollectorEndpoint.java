@@ -15,9 +15,9 @@ import javax.ws.rs.core.Response;
 import com.crossover.trial.weather.api.WeatherCollectorEndpoint;
 import com.crossover.trial.weather.model.Airport;
 import com.crossover.trial.weather.model.AtmosphericInformation;
-import com.crossover.trial.weather.model.DataPoint;
-import com.crossover.trial.weather.model.DataPointType;
 import com.crossover.trial.weather.model.WeatherException;
+import com.crossover.trial.weather.model.datapoint.DataPoint;
+import com.crossover.trial.weather.model.datapoint.DataPointType;
 import com.google.gson.Gson;
 
 /**
@@ -29,9 +29,8 @@ import com.google.gson.Gson;
 
 @Path("/collect")
 public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
-    public final static Logger LOGGER = Logger.getLogger(RestWeatherCollectorEndpoint.class.getName());
-
-    /** shared gson json to object factory */
+    
+	public final static Logger LOGGER = Logger.getLogger(RestWeatherCollectorEndpoint.class.getName());
     public final static Gson gson = new Gson();
 
     @Override
@@ -116,55 +115,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
     public void updateAtmosphericInformation(Airport airport, String pointType, DataPoint dp) throws WeatherException {
         final DataPointType dptype = DataPointType.valueOf(pointType.toUpperCase());
         AtmosphericInformation ai = airport.getAtmosphericInformation();
-        if (pointType.equalsIgnoreCase(DataPointType.WIND.name())) {
-            if (dp.getMean() >= 0) {
-                ai.setWind(dp);
-                ai.setLastUpdateTime(System.currentTimeMillis());
-                return;
-            }
-        }
-
-        if (pointType.equalsIgnoreCase(DataPointType.TEMPERATURE.name())) {
-            if (dp.getMean() >= -50 && dp.getMean() < 100) {
-                ai.setTemperature(dp);
-                ai.setLastUpdateTime(System.currentTimeMillis());
-                return;
-            }
-        }
-
-        if (pointType.equalsIgnoreCase(DataPointType.HUMIDTY.name())) {
-            if (dp.getMean() >= 0 && dp.getMean() < 100) {
-                ai.setHumidity(dp);
-                ai.setLastUpdateTime(System.currentTimeMillis());
-                return;
-            }
-        }
-
-        if (pointType.equalsIgnoreCase(DataPointType.PRESSURE.name())) {
-            if (dp.getMean() >= 650 && dp.getMean() < 800) {
-                ai.setPressure(dp);
-                ai.setLastUpdateTime(System.currentTimeMillis());
-                return;
-            }
-        }
-
-        if (pointType.equalsIgnoreCase(DataPointType.CLOUDCOVER.name())) {
-            if (dp.getMean() >= 0 && dp.getMean() < 100) {
-                ai.setCloudCover(dp);
-                ai.setLastUpdateTime(System.currentTimeMillis());
-                return;
-            }
-        }
-
-        if (pointType.equalsIgnoreCase(DataPointType.PRECIPITATION.name())) {
-            if (dp.getMean() >=0 && dp.getMean() < 100) {
-                ai.setPrecipitation(dp);
-                ai.setLastUpdateTime(System.currentTimeMillis());
-                return;
-            }
-        }
-
-        throw new IllegalStateException("couldn't update atmospheric data");
+        dptype.update(ai, dp);
     }
 
     /**
