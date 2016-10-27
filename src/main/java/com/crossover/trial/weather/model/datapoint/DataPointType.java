@@ -1,6 +1,7 @@
 package com.crossover.trial.weather.model.datapoint;
 
 import com.crossover.trial.weather.model.AtmosphericInformation;
+import com.crossover.trial.weather.model.WeatherException;
 
 /**
  * The various types of data points we can collect.
@@ -10,7 +11,7 @@ import com.crossover.trial.weather.model.AtmosphericInformation;
 // TODO Tests
 public abstract class DataPointType {
 
-	public void update(AtmosphericInformation info, DataPoint data) {
+	public void update(AtmosphericInformation info, DataPoint data) throws WeatherException {
 		validate(data);
 		doUpdate(info, data);
 		setLastUpdateTime(info);
@@ -24,9 +25,9 @@ public abstract class DataPointType {
 
 	protected abstract boolean isValid(DataPoint data);
 	
-	private void validate(DataPoint data) {
+	private void validate(DataPoint data) throws WeatherException {
 		if (!isValid(data))
-			throw new IllegalStateException("couldn't update atmospheric data");
+			throw new WeatherException("Couldn't update atmospheric data");
 			
 	}
 	

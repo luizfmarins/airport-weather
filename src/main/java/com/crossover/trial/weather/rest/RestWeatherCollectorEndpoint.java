@@ -44,8 +44,8 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
     public Response updateWeather(String iataCode, String pointType, String datapointJson) {
         try {
             addDataPoint(iataCode, pointType, gson.fromJson(datapointJson, DataPoint.class));
-        } catch (WeatherException e) {
-            e.printStackTrace();
+        } catch (WeatherException ex) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         }
         return Response.status(Response.Status.OK).build();
     }

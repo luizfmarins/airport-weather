@@ -11,7 +11,9 @@ import static com.crossover.trial.weather.repository.InitialAirports.mmu;
 import static com.crossover.trial.weather.util.DataPointUtil.windDatapoint;
 import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.updateWeather;
 import static com.jayway.restassured.RestAssured.get;
+import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.post;
+import static com.jayway.restassured.http.ContentType.JSON;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,13 +22,15 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import com.crossover.trial.weather.model.Airport;
+import com.crossover.trial.weather.model.datapoint.DataPoint;
+import com.crossover.trial.weather.model.datapoint.DataPointType;
 
 public class RestWeatherCollectorEndpointTest extends RestTestBase {
 
+	private static final int INVALID_WIND_MEAN = -1;
 	private static final double FLL_LONGITUDE = -74.168667;
 	private static final double FLL_LATITUDE = 40.6925;
 	private static final String FLL = "FLL";
@@ -103,6 +107,14 @@ public class RestWeatherCollectorEndpointTest extends RestTestBase {
 	@Test
 	public void addAirportWithSameName() {
 		post("/collect/airport/" + BOS + "/" + FLL_LATITUDE + "/" + FLL_LONGITUDE)
+			.then().assertThat().statusCode(BAD_REQUEST.getStatusCode());
+	}
+	
+	@Test
+	public void updateWeather_invalidWind() {
+		given().contentType(JSON)
+			.body(new DataPoint.Builder().withMean(INVALID_WIND_MEAN).build())
+			.when().post("/collect/weather/" + BOS + "/" + DataPointType.Type.WIND.name())
 			.then().assertThat().statusCode(BAD_REQUEST.getStatusCode());
 	}
 

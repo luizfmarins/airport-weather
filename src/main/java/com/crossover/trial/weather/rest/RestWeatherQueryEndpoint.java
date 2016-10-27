@@ -66,6 +66,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
     @Override
     public Response weather(String iata, String radiusString) {
         double radius = toDouble(radiusString, 0);
+        
         updateRequestFrequency(iata, radius);
         List<AtmosphericInformation> atmosphericInformation = getAtmosphericInformation(iata, radius);
         
