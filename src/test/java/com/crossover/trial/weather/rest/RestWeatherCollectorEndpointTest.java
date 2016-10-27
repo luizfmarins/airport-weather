@@ -16,8 +16,11 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import com.crossover.trial.weather.model.Airport;
@@ -57,6 +60,13 @@ public class RestWeatherCollectorEndpointTest extends RestTestBase {
 		Airport airport = getAirport(BOS);
 		
 		assertThat(airport, equalTo(bos()));
+	}
+	
+	@Test
+	public void getAirport_doesnSendAtmosphericinformation() {
+		String body = get("/collect/airport/" + BOS).asString();
+		
+		assertThat(body, not(containsString("atmosphericInformation")));
 	}
 	
 	@Test

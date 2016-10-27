@@ -3,6 +3,8 @@ package com.crossover.trial.weather.model;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Basic airport information.
  *
@@ -54,6 +56,7 @@ public class Airport {
         this.longitude = longitude;
     }
 
+    @JsonIgnore
     public AtmosphericInformation getAtmosphericInformation() {
 		return information;
 	}
