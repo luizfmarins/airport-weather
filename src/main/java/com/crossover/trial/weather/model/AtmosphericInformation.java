@@ -36,7 +36,7 @@ public class AtmosphericInformation {
     private long lastUpdateTime;
 
     public AtmosphericInformation() {}
-
+    
     protected AtmosphericInformation(DataPoint temperature, DataPoint wind, DataPoint humidity, DataPoint percipitation, DataPoint pressure, DataPoint cloudCover) {
         this.temperature = temperature;
         this.wind = wind;
@@ -143,7 +143,8 @@ public class AtmosphericInformation {
 	}
 
 	public boolean isUpdatedInTheLastDay() {
-		return getLastUpdateTime() > System.currentTimeMillis() - 86400000;
+		Clock clock = Clock.newInstance();
+		return clock.isBeforeLastDay(getLastUpdateTime());
 	}
 	
 	public static Builder atmosphericInformationBuilder() {

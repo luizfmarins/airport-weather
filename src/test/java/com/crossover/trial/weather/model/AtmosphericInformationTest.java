@@ -2,7 +2,9 @@ package com.crossover.trial.weather.model;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -11,8 +13,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class AtmosphericInformationTest {
 
+	private static final int LAST_UPDATE_TIME = 5;
 	@Mock
 	private DataPoint dataPoint;
+	@Mock
+	private Clock clock;
 	private AtmosphericInformation sut = new AtmosphericInformation();
 	
 	@Test
@@ -64,9 +69,27 @@ public class AtmosphericInformationTest {
 	
 	@Test
 	public void isUpdatedInTheLastDay() {
-		sut.setWind(dataPoint);
+		sut.setLastUpdateTime(LAST_UPDATE_TIME);
+		when(clock.isBeforeLastDay(LAST_UPDATE_TIME))
+			.thenReturn(true);
+		Clock.setInstance(clock);
 		
-		assertHasInformation();
+		assertThat(sut.isUpdatedInTheLastDay(), is(true));
+	}
+	
+	@Test
+	public void isNotUpdatedInTheLastDay() {
+		sut.setLastUpdateTime(LAST_UPDATE_TIME);
+		when(clock.isBeforeLastDay(LAST_UPDATE_TIME))
+			.thenReturn(false);
+		Clock.setInstance(clock);
+		
+		assertThat(sut.isUpdatedInTheLastDay(), is(false));
+	}
+
+	@After
+	public void tearDown() {
+		Clock.setInstance(null);
 	}
 	
 	private void assertHasNoInformation() {
