@@ -3,10 +3,12 @@ package com.crossover.trial.weather.rest;
 import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.airports;
 import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.findAirportData;
 import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.getAirportDataIdx;
+import static java.util.stream.Collectors.toSet;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -51,9 +53,9 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
 
     @Override
     public Response getAirports() {
-        Set<String> retval = new HashSet<>();
-        for (Airport ad : airports) 
-            retval.add(ad.getIata());
+    	Set<String> retval = airports.stream()
+    			.map(a -> a.getIata())
+    			.collect(toSet());
 
         return Response.status(Response.Status.OK).entity(retval).build();
     }
