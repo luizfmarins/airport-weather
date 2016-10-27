@@ -11,8 +11,10 @@ import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.fail;
 
 import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -104,6 +106,11 @@ public class RestWeatherQueryEndpointTestIntegration extends TestBase {
 			.body("radius_freq", hasRadiusFreq(0, 1))
 			.body("radius_freq", hasRadiusFreq(100, 2)) 
 			.body("radius_freq", hasRadiusFreq(154, 2)); 
+	}
+	
+	@Test
+	public void ping_atmosphericInformationUpdatedInMoreThenADay_doesnCount() {
+		fail("Not implemented!");
 	}
 	
 	@Test
