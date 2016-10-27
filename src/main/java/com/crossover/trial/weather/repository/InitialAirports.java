@@ -1,4 +1,4 @@
-package com.crossover.trial.weather.rest;
+package com.crossover.trial.weather.repository;
 
 import com.crossover.trial.weather.model.Airport;
 

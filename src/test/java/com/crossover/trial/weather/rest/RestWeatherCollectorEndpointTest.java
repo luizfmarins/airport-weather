@@ -1,13 +1,13 @@
 package com.crossover.trial.weather.rest;
 
 import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.WIND;
-import static com.crossover.trial.weather.rest.InitialAirports.BOS;
-import static com.crossover.trial.weather.rest.InitialAirports.EWR;
-import static com.crossover.trial.weather.rest.InitialAirports.JFK;
-import static com.crossover.trial.weather.rest.InitialAirports.LGA;
-import static com.crossover.trial.weather.rest.InitialAirports.MMU;
-import static com.crossover.trial.weather.rest.InitialAirports.bos;
-import static com.crossover.trial.weather.rest.InitialAirports.mmu;
+import static com.crossover.trial.weather.repository.InitialAirports.BOS;
+import static com.crossover.trial.weather.repository.InitialAirports.EWR;
+import static com.crossover.trial.weather.repository.InitialAirports.JFK;
+import static com.crossover.trial.weather.repository.InitialAirports.LGA;
+import static com.crossover.trial.weather.repository.InitialAirports.MMU;
+import static com.crossover.trial.weather.repository.InitialAirports.bos;
+import static com.crossover.trial.weather.repository.InitialAirports.mmu;
 import static com.crossover.trial.weather.util.DataPointUtil.windDatapoint;
 import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.updateWeather;
 import static com.jayway.restassured.RestAssured.get;

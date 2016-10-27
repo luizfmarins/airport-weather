@@ -2,9 +2,9 @@ package com.crossover.trial.weather.rest;
 
 import static com.crossover.trial.weather.model.AtmosphericInformation.atmosphericInformationBuilder;
 import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.*;
-import static com.crossover.trial.weather.rest.InitialAirports.BOS;
-import static com.crossover.trial.weather.rest.InitialAirports.EWR;
-import static com.crossover.trial.weather.rest.InitialAirports.JFK;
+import static com.crossover.trial.weather.repository.InitialAirports.BOS;
+import static com.crossover.trial.weather.repository.InitialAirports.EWR;
+import static com.crossover.trial.weather.repository.InitialAirports.JFK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.arrayWithSize;

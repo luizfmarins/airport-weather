@@ -2,8 +2,8 @@ package com.crossover.trial.weather.rest;
 
 import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.CLOUDCOVER;
 import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.WIND;
-import static com.crossover.trial.weather.rest.InitialAirports.BOS;
-import static com.crossover.trial.weather.rest.InitialAirports.EWR;
+import static com.crossover.trial.weather.repository.InitialAirports.BOS;
+import static com.crossover.trial.weather.repository.InitialAirports.EWR;
 import static com.crossover.trial.weather.util.DataPointUtil.cloudOverDatapoint;
 import static com.crossover.trial.weather.util.DataPointUtil.windDatapoint;
 import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.updateWeather;

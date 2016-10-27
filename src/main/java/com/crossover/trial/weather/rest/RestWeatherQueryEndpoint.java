@@ -1,10 +1,10 @@
 package com.crossover.trial.weather.rest;
 
-import static com.crossover.trial.weather.rest.InitialAirports.bos;
-import static com.crossover.trial.weather.rest.InitialAirports.ewr;
-import static com.crossover.trial.weather.rest.InitialAirports.jfk;
-import static com.crossover.trial.weather.rest.InitialAirports.lga;
-import static com.crossover.trial.weather.rest.InitialAirports.mmu;
+import static com.crossover.trial.weather.repository.InitialAirports.bos;
+import static com.crossover.trial.weather.repository.InitialAirports.ewr;
+import static com.crossover.trial.weather.repository.InitialAirports.jfk;
+import static com.crossover.trial.weather.repository.InitialAirports.lga;
+import static com.crossover.trial.weather.repository.InitialAirports.mmu;
 import static java.util.stream.Collectors.toList;
 import static jersey.repackaged.com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang3.math.NumberUtils.toDouble;
@@ -157,13 +157,5 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         requestFrequency.clear();
         radiusFreq.clear();
         weatherQueryCount = 0;
-        AirportRepository.clear();
-        AirportRepository airportRepository = AirportRepository.getInstance();
-        
-        airportRepository.save(bos());
-        airportRepository.save(ewr());
-        airportRepository.save(jfk());
-        airportRepository.save(lga());
-        airportRepository.save(mmu());
     }
 }
