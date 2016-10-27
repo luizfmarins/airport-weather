@@ -12,6 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.crossover.trial.weather.model.Airport;
 import com.crossover.trial.weather.model.AtmosphericInformation;
+import com.crossover.trial.weather.repository.AirportRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RestWeatherQueryEndpointUnitTest {
@@ -20,6 +21,7 @@ public class RestWeatherQueryEndpointUnitTest {
 	private AtmosphericInformation information;
 	
 	private RestWeatherQueryEndpoint sut = new RestWeatherQueryEndpoint();
+	private AirportRepository airportRepository = AirportRepository.getInstance();
 	
 	@Test
 	public void calculateDataSize_noData() throws Exception {
@@ -65,6 +67,6 @@ public class RestWeatherQueryEndpointUnitTest {
 	private void addAirport() {
 		Airport airport = new Airport();
 		airport.setAtmosphericInformation(information);
-		RestWeatherQueryEndpoint.airports.add(airport);
+		airportRepository.save(airport);
 	}
 }

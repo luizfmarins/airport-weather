@@ -1,14 +1,9 @@
 package com.crossover.trial.weather.rest;
 
-import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.airports;
-import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.findAirportData;
-import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.getAirportDataIdx;
 import static java.util.stream.Collectors.toSet;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,6 +15,7 @@ import com.crossover.trial.weather.model.AtmosphericInformation;
 import com.crossover.trial.weather.model.WeatherException;
 import com.crossover.trial.weather.model.datapoint.DataPoint;
 import com.crossover.trial.weather.model.datapoint.DataPointType;
+import com.crossover.trial.weather.repository.AirportRepository;
 import com.google.gson.Gson;
 
 /**
@@ -32,8 +28,10 @@ import com.google.gson.Gson;
 @Path("/collect")
 public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
     
-	public final static Logger LOGGER = Logger.getLogger(RestWeatherCollectorEndpoint.class.getName());
-    public final static Gson gson = new Gson();
+	private final static Logger LOGGER = Logger.getLogger(RestWeatherCollectorEndpoint.class.getName());
+    
+	private final Gson gson = new Gson();
+	private final AirportRepository airportRepository = AirportRepository.getInstance();
 
     @Override
     public Response ping() {
@@ -53,7 +51,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
 
     @Override
     public Response getAirports() {
-    	Set<String> retval = airports.stream()
+    	Set<String> retval = airportRepository.list().stream()
     			.map(a -> a.getIata())
     			.collect(toSet());
 
@@ -63,14 +61,14 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
 
     @Override
     public Response getAirport(String iata) {
-        Airport ad = findAirportData(iata);
+        Airport ad = airportRepository.findByCode(iata);
         return Response.status(Response.Status.OK).entity(ad).build();
     }
 
 
     @Override
     public Response addAirport(String iata, String latString, String longString) {
-    	Airport airport = findAirportData(iata);
+    	Airport airport = airportRepository.findByCode(iata);
     	if (airport != null)
     		return Response.status(Response.Status.BAD_REQUEST).build();
     	
@@ -89,10 +87,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
         System.exit(0);
         return Response.noContent().build();
     }
-    //
-    // Internal support methods
-    //
-
+ 
     /**
      * Update the airports weather data with the collected data.
      *
@@ -103,7 +98,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
      * @throws WeatherException if the update can not be completed
      */
     public void addDataPoint(String iataCode, String pointType, DataPoint dp) throws WeatherException {
-        Airport airport = findAirportData(iataCode);
+        Airport airport = airportRepository.findByCode(iataCode);
         updateAtmosphericInformation(airport, pointType, dp);
     }
 
@@ -129,19 +124,12 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
      *
      * @return the added airport
      */
-    public static Airport addAirport(String iataCode, double latitude, double longitude) {
+    public Airport addAirport(String iataCode, double latitude, double longitude) {
         Airport ad = new Airport();
         ad.setIata(iataCode);
         ad.setLatitude(latitude);
         ad.setLongitude(longitude);
-        addAirport(ad);
+        airportRepository.save(ad);
         return ad;
-    }
-    
-    public static Airport addAirport(Airport ad) {
-    	airports.add(ad);
-    	AtmosphericInformation ai = new AtmosphericInformation();
-    	ad.setAtmosphericInformation(ai);
-    	return ad;
     }
 }

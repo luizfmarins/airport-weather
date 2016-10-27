@@ -21,7 +21,7 @@ public class Airport {
     /** longitude value in degrees */
     private double longitude;
     
-    private AtmosphericInformation information;
+    private AtmosphericInformation information = new AtmosphericInformation();
 
     public Airport() {}
     
