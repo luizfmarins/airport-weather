@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Test;
 
-import com.crossover.trial.weather.model.AirportData;
+import com.crossover.trial.weather.model.Airport;
 
 public class RestWeatherCollectorEndpointTest extends RestTestBase {
 
@@ -54,14 +54,14 @@ public class RestWeatherCollectorEndpointTest extends RestTestBase {
 	
 	@Test
 	public void getAirport_BOS() {
-		AirportData airport = getAirport(BOS);
+		Airport airport = getAirport(BOS);
 		
 		assertThat(airport, equalTo(bos()));
 	}
 	
 	@Test
 	public void getAirport_MMU() {
-		AirportData airport = getAirport(MMU);
+		Airport airport = getAirport(MMU);
 		
 		assertThat(airport, equalTo(mmu()));
 	}
@@ -75,7 +75,7 @@ public class RestWeatherCollectorEndpointTest extends RestTestBase {
 	public void addAirport_FLL_getAirport() {
 		addAirport(FLL, FLL_LATITUDE, FLL_LONGITUDE);
 		
-		AirportData airport = getAirport(FLL);
+		Airport airport = getAirport(FLL);
 		assertThat(airport.getIata(), equalTo(FLL));
 		assertThat(airport.getLatitude(), equalTo(FLL_LATITUDE));
 		assertThat(airport.getLongitude(), equalTo(FLL_LONGITUDE));
@@ -102,7 +102,7 @@ public class RestWeatherCollectorEndpointTest extends RestTestBase {
 		
 	}
 
-	private AirportData getAirport(String airportName) {
-		return get("/collect/airport/" + airportName).as(AirportData.class);
+	private Airport getAirport(String airportName) {
+		return get("/collect/airport/" + airportName).as(Airport.class);
 	}
 }

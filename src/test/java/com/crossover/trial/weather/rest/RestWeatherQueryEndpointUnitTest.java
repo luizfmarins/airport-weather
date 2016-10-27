@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.crossover.trial.weather.model.Airport;
 import com.crossover.trial.weather.model.AtmosphericInformation;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,16 +30,15 @@ public class RestWeatherQueryEndpointUnitTest {
 	
 	@Test
 	public void calculateDataSize_oneAirportWithNoInformation() throws Exception {
-		RestWeatherQueryEndpoint.atmosphericInformation.add(information);
+		addAirport();
 		
 		long size = sut.calculateDataSize();
 		
 		assertThat(size, equalTo(0l));
 	}
-	
+
 	@Test
 	public void calculateDataSize_oneAirportWithInformation_notInTheLastDay() {
-		RestWeatherQueryEndpoint.atmosphericInformation.add(information);
 		when(information.hasInformation()).thenReturn(true);
 		
 		long size = sut.calculateDataSize();
@@ -48,7 +48,6 @@ public class RestWeatherQueryEndpointUnitTest {
 	
 	@Test
 	public void calculateDataSize_oneAirportWithInformation_updatedInTheLastDay() {
-		RestWeatherQueryEndpoint.atmosphericInformation.add(information);
 		when(information.hasInformation()).thenReturn(true);
 		when(information.isUpdatedInTheLastDay()).thenReturn(true);
 		
@@ -56,9 +55,16 @@ public class RestWeatherQueryEndpointUnitTest {
 		
 		assertThat(size, equalTo(1l));
 	}
-	
+
 	@Before
 	public void before() {
 		RestWeatherQueryEndpoint.init();
+		addAirport();
+	}
+	
+	private void addAirport() {
+		Airport airport = new Airport();
+		airport.setAtmosphericInformation(information);
+		RestWeatherQueryEndpoint.airports.add(airport);
 	}
 }

@@ -1,6 +1,6 @@
 package com.crossover.trial.weather.rest;
 
-import com.crossover.trial.weather.model.AirportData;
+import com.crossover.trial.weather.model.Airport;
 
 public final class InitialAirports {
 
@@ -12,23 +12,23 @@ public final class InitialAirports {
 	
 	private InitialAirports() {}
 	
-	public static AirportData bos() {
-		return new AirportData(BOS, 42.364347, -71.005181);
+	public static Airport bos() {
+		return new Airport(BOS, 42.364347, -71.005181);
 	}
 	
-	public static AirportData ewr() {
-		return new AirportData(EWR, 40.6925, -74.168667);
+	public static Airport ewr() {
+		return new Airport(EWR, 40.6925, -74.168667);
 	}
 	
-	public static AirportData jfk() {
-		return new AirportData(JFK, 40.639751, -73.778925);
+	public static Airport jfk() {
+		return new Airport(JFK, 40.639751, -73.778925);
 	}
 	
-	public static AirportData lga() {
-		return new AirportData(LGA, 40.777245, -73.872608);
+	public static Airport lga() {
+		return new Airport(LGA, 40.777245, -73.872608);
 	}
 	
-	public static AirportData mmu() {
-		return new AirportData(MMU, 40.79935, -74.4148747);
+	public static Airport mmu() {
+		return new Airport(MMU, 40.79935, -74.4148747);
 	}
 }

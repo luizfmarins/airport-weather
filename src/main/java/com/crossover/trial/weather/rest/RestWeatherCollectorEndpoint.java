@@ -1,7 +1,6 @@
 package com.crossover.trial.weather.rest;
 
-import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.airportData;
-import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.atmosphericInformation;
+import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.airports;
 import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.findAirportData;
 import static com.crossover.trial.weather.rest.RestWeatherQueryEndpoint.getAirportDataIdx;
 
@@ -14,7 +13,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 import com.crossover.trial.weather.api.WeatherCollectorEndpoint;
-import com.crossover.trial.weather.model.AirportData;
+import com.crossover.trial.weather.model.Airport;
 import com.crossover.trial.weather.model.AtmosphericInformation;
 import com.crossover.trial.weather.model.DataPoint;
 import com.crossover.trial.weather.model.DataPointType;
@@ -54,7 +53,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
     @Override
     public Response getAirports() {
         Set<String> retval = new HashSet<>();
-        for (AirportData ad : airportData) 
+        for (Airport ad : airports) 
             retval.add(ad.getIata());
 
         return Response.status(Response.Status.OK).entity(retval).build();
@@ -63,14 +62,14 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
 
     @Override
     public Response getAirport(String iata) {
-        AirportData ad = findAirportData(iata);
+        Airport ad = findAirportData(iata);
         return Response.status(Response.Status.OK).entity(ad).build();
     }
 
 
     @Override
     public Response addAirport(String iata, String latString, String longString) {
-    	AirportData airport = findAirportData(iata);
+    	Airport airport = findAirportData(iata);
     	if (airport != null)
     		return Response.status(Response.Status.BAD_REQUEST).build();
     	
@@ -103,9 +102,8 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
      * @throws WeatherException if the update can not be completed
      */
     public void addDataPoint(String iataCode, String pointType, DataPoint dp) throws WeatherException {
-        int airportDataIdx = getAirportDataIdx(iataCode);
-        AtmosphericInformation ai = atmosphericInformation.get(airportDataIdx);
-        updateAtmosphericInformation(ai, pointType, dp);
+        Airport airport = findAirportData(iataCode);
+        updateAtmosphericInformation(airport, pointType, dp);
     }
 
     /**
@@ -115,9 +113,9 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
      * @param pointType the data point type as a string
      * @param dp the actual data point
      */
-    public void updateAtmosphericInformation(AtmosphericInformation ai, String pointType, DataPoint dp) throws WeatherException {
+    public void updateAtmosphericInformation(Airport airport, String pointType, DataPoint dp) throws WeatherException {
         final DataPointType dptype = DataPointType.valueOf(pointType.toUpperCase());
-
+        AtmosphericInformation ai = airport.getAtmosphericInformation();
         if (pointType.equalsIgnoreCase(DataPointType.WIND.name())) {
             if (dp.getMean() >= 0) {
                 ai.setWind(dp);
@@ -178,8 +176,8 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
      *
      * @return the added airport
      */
-    public static AirportData addAirport(String iataCode, double latitude, double longitude) {
-        AirportData ad = new AirportData();
+    public static Airport addAirport(String iataCode, double latitude, double longitude) {
+        Airport ad = new Airport();
         ad.setIata(iataCode);
         ad.setLatitude(latitude);
         ad.setLongitude(longitude);
@@ -187,10 +185,10 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
         return ad;
     }
     
-    public static AirportData addAirport(AirportData ad) {
-    	airportData.add(ad);
+    public static Airport addAirport(Airport ad) {
+    	airports.add(ad);
     	AtmosphericInformation ai = new AtmosphericInformation();
-    	atmosphericInformation.add(ai);
+    	ad.setAtmosphericInformation(ai);
     	return ad;
     }
 }

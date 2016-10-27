@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * @author code test administrator
  */
-public class AirportData {
+public class Airport {
 
 	private static final double EARTH_RADIUS_KM = 6372.8;
 	
@@ -20,10 +20,12 @@ public class AirportData {
 
     /** longitude value in degrees */
     private double longitude;
-
-    public AirportData() {}
     
-    public AirportData(String iata, double latitude, double longitude) {
+    private AtmosphericInformation information;
+
+    public Airport() {}
+    
+    public Airport(String iata, double latitude, double longitude) {
 		this.iata = iata;
 		this.latitude = latitude;
 		this.longitude = longitude;}
@@ -52,25 +54,33 @@ public class AirportData {
         this.longitude = longitude;
     }
 
-    public String toString() {
+    public AtmosphericInformation getAtmosphericInformation() {
+		return information;
+	}
+
+	public void setAtmosphericInformation(AtmosphericInformation information) {
+		this.information = information;
+	}
+
+	public String toString() {
         return ReflectionToStringBuilder.toString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
     }
 
     public boolean equals(Object other) {
-        if (other instanceof AirportData) 
-            return ((AirportData)other).getIata().equals(this.getIata());
+        if (other instanceof Airport) 
+            return ((Airport)other).getIata().equals(this.getIata());
 
         return false;
     }
 
-	public boolean isWithinRadius(AirportData other, double radius) {
+	public boolean isWithinRadius(Airport other, double radius) {
 		if (other == null)
 			return false;
 		
 		return calculateDistance(other) <= radius; 
 	}
 	
-	private double calculateDistance(AirportData ad2) {
+	private double calculateDistance(Airport ad2) {
         double deltaLat = Math.toRadians(ad2.getLatitude() - getLatitude());
         double deltaLon = Math.toRadians(ad2.getLongitude() - getLongitude());
         double a =  Math.pow(Math.sin(deltaLat / 2), 2) + Math.pow(Math.sin(deltaLon / 2), 2)

@@ -7,7 +7,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.crossover.trial.weather.model.AirportData;
+import com.crossover.trial.weather.model.Airport;
 import com.crossover.trial.weather.model.DataPointType;
 
 /**
@@ -57,7 +57,7 @@ public interface WeatherCollectorEndpoint {
      * Retrieve airport data, including latitude and longitude for a particular airport
      *
      * @param iata the 3 letter airport code
-     * @return an HTTP Response with a json representation of {@link AirportData}
+     * @return an HTTP Response with a json representation of {@link Airport}
      */
     @GET
     @Path("/airport/{iata}")

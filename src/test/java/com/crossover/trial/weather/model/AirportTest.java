@@ -8,10 +8,10 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AirportDataTest {
+public class AirportTest {
 
-	private AirportData ap1 = new AirportData("AP1", 42.364347, -71.005181);
-	private AirportData ap2 = new AirportData("AP2", 40.6925, -74.168667);		
+	private Airport ap1 = new Airport("AP1", 42.364347, -71.005181);
+	private Airport ap2 = new Airport("AP2", 40.6925, -74.168667);		
 	
 	@Test
 	public void isWithinRadiusZero_false() {

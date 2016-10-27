@@ -6,11 +6,12 @@ import static com.crossover.trial.weather.rest.InitialAirports.jfk;
 import static com.crossover.trial.weather.rest.InitialAirports.lga;
 import static com.crossover.trial.weather.rest.InitialAirports.mmu;
 import static com.crossover.trial.weather.rest.RestWeatherCollectorEndpoint.addAirport;
+import static java.util.stream.Collectors.toList;
 import static jersey.repackaged.com.google.common.collect.Lists.newArrayList;
+import static org.apache.commons.lang3.math.NumberUtils.toDouble;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -18,10 +19,8 @@ import java.util.logging.Logger;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.crossover.trial.weather.api.WeatherQueryEndpoint;
-import com.crossover.trial.weather.model.AirportData;
+import com.crossover.trial.weather.model.Airport;
 import com.crossover.trial.weather.model.AtmosphericInformation;
 import com.google.gson.Gson;
 
@@ -39,10 +38,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
     private static final Gson gson = new Gson();
 
     /** all known airports */
-    protected static List<AirportData> airportData = new ArrayList<>();
-
-    /** atmospheric information for each airport, idx corresponds with airportData */
-    protected static List<AtmosphericInformation> atmosphericInformation = new LinkedList<>();
+    protected static List<Airport> airports = new ArrayList<>();
 
     /**
      * Internal performance counter to better understand most requested information, this map can be improved but
@@ -50,7 +46,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
      * we don't want to write this to disk, but will pull it off using a REST request and aggregate with other
      * performance metrics {@link #ping()}
      */
-    public static Map<AirportData, Integer> requestFrequency = new HashMap<AirportData, Integer>();
+    public static Map<Airport, Integer> requestFrequency = new HashMap<Airport, Integer>();
     public static Map<Double, Integer> radiusFreq = new HashMap<Double, Integer>();
     private static int weatherQueryCount = 0;
     
@@ -93,7 +89,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
 	private Map<String, Double> calculateIataFrequency() {
 		Map<String, Double> freq = new HashMap<>();
 
-		for (AirportData data : airportData) {
+		for (Airport data : airports) {
     		double frac = weatherQueryCount == 0 ? 0 : (double) requestFrequency.getOrDefault(data, 0) / weatherQueryCount;
     		freq.put(data.getIata(), frac);
         }
@@ -102,6 +98,10 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
 	}
 
 	long calculateDataSize() {
+		List<AtmosphericInformation> atmosphericInformation = airports.stream()
+			.map(ap -> ap.getAtmosphericInformation())
+			.collect(toList());
+		
 		long datasize = atmosphericInformation.stream()
 			.filter(ai -> ai.hasInformation() && ai.isUpdatedInTheLastDay())
 			.count();
@@ -119,29 +119,23 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
      */
     @Override
     public Response weather(String iata, String radiusString) {
-        double radius = NumberUtils.toDouble(radiusString, 0);
+        double radius = toDouble(radiusString, 0);
         updateRequestFrequency(iata, radius);
-
-        return Response.status(Response.Status.OK)
-        		.entity(getAtmosphericInformation(iata, radius))
-        		.build();
+        List<AtmosphericInformation> atmosphericInformation = getAtmosphericInformation(iata, radius);
+        
+		return Response.status(Response.Status.OK).entity(atmosphericInformation).build();
     }
 
 	private List<AtmosphericInformation> getAtmosphericInformation(String iata, double radius) {
-        if (radius == 0) {
-            int idx = getAirportDataIdx(iata);
-            return newArrayList(atmosphericInformation.get(idx));
-        } 
+        Airport airport = findAirportData(iata);
+
+        if (radius == 0) 
+            return newArrayList(airport.getAtmosphericInformation());
         
-        List<AtmosphericInformation> retval = new ArrayList<>();
-        AirportData ad = findAirportData(iata);
-        for (int i=0; i< airportData.size(); i++){
-            if (ad.isWithinRadius(airportData.get(i), radius)) {
-                AtmosphericInformation ai = atmosphericInformation.get(i);
-                if (ai.hasInformation())
-                    retval.add(ai);
-            }
-        }
+        List<AtmosphericInformation> retval = airports.stream()
+        	.filter(other -> airport.isWithinRadius(other, radius) && other.getAtmosphericInformation().hasInformation())
+        	.map(ap -> ap.getAtmosphericInformation())
+        	.collect(toList());
         
 		return retval;
 	}
@@ -154,7 +148,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
      * @param radius query radius
      */
     public void updateRequestFrequency(String iata, Double radius) {
-        AirportData airportData = findAirportData(iata);
+        Airport airportData = findAirportData(iata);
         requestFrequency.put(airportData, requestFrequency.getOrDefault(airportData, 0) + 1);
         radiusFreq.put(radius, radiusFreq.getOrDefault(radius, 0) + 1);
         weatherQueryCount++;
@@ -166,8 +160,8 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
      * @param iataCode as a string
      * @return airport data or null if not found
      */
-    public static AirportData findAirportData(String iataCode) {
-        return airportData.stream()
+    public static Airport findAirportData(String iataCode) {
+        return airports.stream()
             .filter(ap -> ap.getIata().equals(iataCode))
             .findFirst().orElse(null);
     }
@@ -179,8 +173,8 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
      * @return airport data or null if not found
      */
     public static int getAirportDataIdx(String iataCode) {
-        AirportData ad = findAirportData(iataCode);
-        return airportData.indexOf(ad);
+        Airport ad = findAirportData(iataCode);
+        return airports.indexOf(ad);
     }
 
     /**
@@ -188,8 +182,7 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
      */
     // TODO
     public static void init() {
-        airportData.clear();
-        atmosphericInformation.clear();
+        airports.clear();
         requestFrequency.clear();
         radiusFreq.clear();
         weatherQueryCount = 0;
