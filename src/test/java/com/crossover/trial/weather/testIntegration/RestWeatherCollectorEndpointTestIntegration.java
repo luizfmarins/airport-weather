@@ -30,6 +30,7 @@ public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 	private static final double DISTANCE_BOS_JFK = 309;
 	private static final DataPoint EMPTY_DATA_POINT = null;
 
+	// TODO According to the javadoc shoud reurn 1
 	@Test
 	public void ping() throws Exception {
 		get("/collect/ping")
@@ -164,6 +165,14 @@ public class RestWeatherCollectorEndpointTestIntegration extends TestBase {
 					.withCloudCover(EMPTY_DATA_POINT)
 					.withPressure(pressureDatapoint())
 					.build()));
+	}
+	
+	@Test
+	public void getAirports() {
+		get("/collect/airports")
+			.then().assertThat()
+			.statusCode(200)
+			.body(equalTo("ready"));
 	}
 	
 	private void assertQueryPingDatasize(int datasize) {
