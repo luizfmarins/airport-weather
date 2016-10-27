@@ -172,13 +172,17 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
      */
     public static AirportData addAirport(String iataCode, double latitude, double longitude) {
         AirportData ad = new AirportData();
-        airportData.add(ad);
-
-        AtmosphericInformation ai = new AtmosphericInformation();
-        atmosphericInformation.add(ai);
         ad.setIata(iataCode);
         ad.setLatitude(latitude);
-        ad.setLatitude(longitude);
+        ad.setLongitude(longitude);
+        addAirport(ad);
         return ad;
+    }
+    
+    public static AirportData addAirport(AirportData ad) {
+    	airportData.add(ad);
+    	AtmosphericInformation ai = new AtmosphericInformation();
+    	atmosphericInformation.add(ai);
+    	return ad;
     }
 }

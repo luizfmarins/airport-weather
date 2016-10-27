@@ -1,10 +1,6 @@
 package com.crossover.trial.weather;
 
-import static com.crossover.trial.weather.InitialAirports.BOS;
-import static com.crossover.trial.weather.InitialAirports.EWR;
-import static com.crossover.trial.weather.InitialAirports.JFK;
-import static com.crossover.trial.weather.InitialAirports.LGA;
-import static com.crossover.trial.weather.InitialAirports.MMU;
+import static com.crossover.trial.weather.InitialAirports.*;
 import static com.crossover.trial.weather.RestWeatherCollectorEndpoint.addAirport;
 
 import java.util.ArrayList;
@@ -196,11 +192,11 @@ public class RestWeatherQueryEndpoint implements WeatherQueryEndpoint {
         radiusFreq.clear();
         weatherQueryCount = 0;
 
-        addAirport(BOS, 42.364347, -71.005181);
-        addAirport(EWR, 40.6925, -74.168667);
-        addAirport(JFK, 40.639751, -73.778925);
-        addAirport(LGA, 40.777245, -73.872608);
-        addAirport(MMU, 40.79935, -74.4148747);
+        addAirport(bos());
+        addAirport(ewr());
+        addAirport(jfk());
+        addAirport(lga());
+        addAirport(mmu());
     }
 
 	// TODO
