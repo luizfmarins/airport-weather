@@ -7,6 +7,7 @@ import com.crossover.trial.weather.model.AtmosphericInformation;
  *
  * @author code test administrator
  */
+// TODO Tests
 public abstract class DataPointType {
 
 	public void update(AtmosphericInformation info, DataPoint data) {
