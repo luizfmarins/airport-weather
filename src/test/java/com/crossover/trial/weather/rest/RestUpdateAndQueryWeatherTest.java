@@ -20,7 +20,6 @@ import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 import com.crossover.trial.weather.model.AtmosphericInformation;

@@ -32,7 +32,6 @@ import org.junit.Test;
 import com.crossover.trial.weather.model.Airport;
 import com.crossover.trial.weather.model.datapoint.DataPoint;
 import com.crossover.trial.weather.model.datapoint.DataPointType;
-import com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil;
 
 public class RestWeatherCollectorEndpointTest extends RestTestBase {
 

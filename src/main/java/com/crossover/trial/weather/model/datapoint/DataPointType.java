@@ -48,5 +48,10 @@ public abstract class DataPointType {
 		 private Type(DataPointType type) {
 			 this.type = type;
 		 }
+
+		 public DataPointType getDataPointType() {
+			 return this.type;
+		 }
 	}
+	
 }
