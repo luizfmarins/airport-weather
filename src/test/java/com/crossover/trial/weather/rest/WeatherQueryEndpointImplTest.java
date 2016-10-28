@@ -61,7 +61,7 @@ public class WeatherQueryEndpointImplTest {
 	@Before
 	public void before() {
 		WeatherQueryEndpointImpl.init();
-		AirportRepository.clear();
+		AirportRepository.init();
 		addAirport();
 	}
 	

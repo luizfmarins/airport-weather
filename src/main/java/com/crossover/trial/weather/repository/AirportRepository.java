@@ -34,17 +34,16 @@ public abstract class AirportRepository {
 		init();
 	}
 	
+	public static void init() {
+		getInstance().doClear();
+		doInit();
+	}
+	
 	public static void clear() {
 		getInstance().doClear();
-		init();
 	}
 	
-	// TODO
-	public static void rellyClear() {
-		getInstance().doClear();
-	}
-	
-	private static void init() {
+	private static void doInit() {
         AirportRepository airportRepository = AirportRepository.getInstance();
         airportRepository.save(bos());
         airportRepository.save(ewr());

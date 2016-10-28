@@ -27,6 +27,6 @@ public class WeatherCollectClientTest extends RestTestBase {
 	
 	@Before
 	public void before() {
-		AirportRepository.rellyClear();
+		AirportRepository.clear();
 	}	
 }

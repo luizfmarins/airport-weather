@@ -47,7 +47,7 @@ public class AirportLoaderTest extends RestTestBase {
 	
 	@Before
 	public void before() {
-		AirportRepository.rellyClear();
+		AirportRepository.clear();
 	}
 	
 }
