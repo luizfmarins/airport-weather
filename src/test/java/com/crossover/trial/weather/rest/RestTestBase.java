@@ -6,7 +6,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import com.crossover.trial.weather.main.WeatherServer;
+import com.crossover.trial.weather.WeatherServer;
 import com.crossover.trial.weather.repository.AirportRepository;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.parsing.Parser;

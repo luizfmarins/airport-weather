@@ -11,6 +11,7 @@ import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.get
 import org.junit.Before;
 import org.junit.Test;
 
+import com.crossover.trial.weather.AirportLoader;
 import com.crossover.trial.weather.model.Airport;
 import com.crossover.trial.weather.repository.AirportRepository;
 import com.crossover.trial.weather.rest.RestTestBase;

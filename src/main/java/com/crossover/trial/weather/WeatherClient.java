@@ -1,4 +1,4 @@
-package com.crossover.trial.weather.main;
+package com.crossover.trial.weather;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;

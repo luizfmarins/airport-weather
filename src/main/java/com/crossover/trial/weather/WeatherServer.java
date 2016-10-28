@@ -1,4 +1,4 @@
-package com.crossover.trial.weather.main;
+package com.crossover.trial.weather;
 
 import static java.lang.String.format;
 

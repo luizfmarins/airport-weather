@@ -1,4 +1,4 @@
-package com.crossover.trial.weather.loader;
+package com.crossover.trial.weather;
 
 import static com.crossover.trial.weather.loader.AirportDataConverter.AIPORT_DATA_CONVERTER;
 import static jersey.repackaged.com.google.common.collect.Collections2.transform;
@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.crossover.trial.weather.client.WeatherCollectClient;
+import com.crossover.trial.weather.loader.AirportData;
+import com.crossover.trial.weather.loader.AirportFileLoader;
 import com.crossover.trial.weather.model.Airport;
 
 /**
