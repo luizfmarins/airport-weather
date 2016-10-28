@@ -24,6 +24,7 @@ import java.nio.file.Paths;
  *
  * To avoid creating a submission that can not be graded, don't change this file and be sure to run mvn test before submission.
  */
+@SuppressWarnings("all")
 public class DoNotChangeTest {
 
     /** required group id */

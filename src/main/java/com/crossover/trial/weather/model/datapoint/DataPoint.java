@@ -21,6 +21,7 @@ public class DataPoint {
     private DataPoint() {}
 
     protected DataPoint(int first, int second, int mean, int third, int count) {
+    	this();
         this.setFirst(first);
         this.setMean(mean);
         this.setSecond(second);

@@ -3,7 +3,6 @@ package com.crossover.trial.weather.rest;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 import com.crossover.trial.weather.api.WeatherCollectorEndpoint;
