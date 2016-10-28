@@ -2,10 +2,10 @@ package com.crossover.trial.weather.rest;
 
 import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.CLOUDCOVER;
 import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.WIND;
-import static com.crossover.trial.weather.repository.InitialAirports.BOS;
-import static com.crossover.trial.weather.repository.InitialAirports.EWR;
 import static com.crossover.trial.weather.util.DataPointUtil.cloudOverDatapoint;
 import static com.crossover.trial.weather.util.DataPointUtil.windDatapoint;
+import static com.crossover.trial.weather.util.InitialAirports.BOS;
+import static com.crossover.trial.weather.util.InitialAirports.EWR;
 import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.updateWeather;
 import static com.jayway.restassured.RestAssured.get;
 import static javax.ws.rs.core.Response.Status.OK;

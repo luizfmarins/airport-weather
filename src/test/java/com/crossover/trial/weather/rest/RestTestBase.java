@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import com.crossover.trial.weather.WeatherServer;
-import com.crossover.trial.weather.repository.AirportRepository;
+import com.crossover.trial.weather.util.Fixture;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.parsing.Parser;
 
@@ -26,7 +26,7 @@ public abstract class RestTestBase {
 	@Before
 	public void before() {
 		WeatherQueryEndpointImpl.init();
-		AirportRepository.init();
+		Fixture.setup();
 	}
 	
 	@AfterClass

@@ -1,6 +1,6 @@
 package com.crossover.trial.weather.client;
 
-import static com.crossover.trial.weather.repository.InitialAirports.BOS;
+import static com.crossover.trial.weather.util.InitialAirports.BOS;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

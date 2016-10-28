@@ -3,8 +3,8 @@ package com.crossover.trial.weather.loader;
 import static com.crossover.trial.weather.loader.AirportLoaderTestUtil.assertBostonAirport;
 import static com.crossover.trial.weather.loader.AirportLoaderTestUtil.assertNewarkAirport;
 import static com.crossover.trial.weather.loader.AirportLoaderTestUtil.file;
-import static com.crossover.trial.weather.repository.InitialAirports.BOS;
-import static com.crossover.trial.weather.repository.InitialAirports.EWR;
+import static com.crossover.trial.weather.util.InitialAirports.BOS;
+import static com.crossover.trial.weather.util.InitialAirports.EWR;
 import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.getAirport;
 import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.getAirportAssertNotFound;
 
@@ -49,6 +49,6 @@ public class AirportLoaderTest extends RestTestBase {
 	@Before
 	public void before() {
 		AirportRepository.clear();
+		AirportRepository.setInitized(true);
 	}
-	
 }

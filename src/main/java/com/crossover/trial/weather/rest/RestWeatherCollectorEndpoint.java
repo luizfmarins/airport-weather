@@ -22,7 +22,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
     
 	private final WeatherCollectorEndpoint delegate = new WeatherCollectorEndpointImpl();
 	private final Gson gson = new Gson();
-
+	
     @Override
     public Response ping() {
     	LOGGER.info("WeatherCollectorEndpoint.ping");

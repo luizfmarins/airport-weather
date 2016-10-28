@@ -1,18 +1,18 @@
 package com.crossover.trial.weather.repository;
 
-import static com.crossover.trial.weather.repository.InitialAirports.bos;
-import static com.crossover.trial.weather.repository.InitialAirports.ewr;
-import static com.crossover.trial.weather.repository.InitialAirports.jfk;
-import static com.crossover.trial.weather.repository.InitialAirports.lga;
-import static com.crossover.trial.weather.repository.InitialAirports.mmu;
-
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
+import com.crossover.trial.weather.AirportLoader;
 import com.crossover.trial.weather.model.Airport;
 
 public abstract class AirportRepository {
 
+	private static final String AIRPORTS_DAT = "airports.dat";
 	private static AirportRepository instance;
+	private static boolean isInitialized = false;
 
 	public abstract List<Airport> list();
 	
@@ -25,30 +25,37 @@ public abstract class AirportRepository {
 	public abstract void delete(Airport airport);
 	
 	public static AirportRepository getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new MemoryAirportRepository();
+			init();
+		}
 		return instance;
 	}
 
-	static {
-		init();
-	}
-	
-	public static void init() {
-		getInstance().doClear();
-		doInit();
+	private static void init() {
+		try {
+			doInit();
+		} catch (URISyntaxException | IOException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 	
 	public static void clear() {
 		getInstance().doClear();
 	}
 	
-	private static void doInit() {
-        AirportRepository airportRepository = AirportRepository.getInstance();
-        airportRepository.save(bos());
-        airportRepository.save(ewr());
-        airportRepository.save(jfk());
-        airportRepository.save(lga());
-        airportRepository.save(mmu());
+	public static void setInitized(boolean isInitialized) {
+		AirportRepository.isInitialized = isInitialized;
 	}
+	
+	private static void doInit() throws URISyntaxException, IOException {
+		if (isInitialized) 
+			return;
+		isInitialized = true;
+		
+		File file = new File(AirportRepository.class.getResource(AIRPORTS_DAT).toURI().getPath());
+		AirportLoader loader = new AirportLoader(file, "http://localhost:9090");
+		loader.upload();
+	}
+
 }

@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.crossover.trial.weather.model.Airport;
 import com.crossover.trial.weather.model.AtmosphericInformation;
 import com.crossover.trial.weather.repository.AirportRepository;
+import com.crossover.trial.weather.util.Fixture;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WeatherQueryEndpointImplTest {
@@ -61,7 +62,7 @@ public class WeatherQueryEndpointImplTest {
 	@Before
 	public void before() {
 		WeatherQueryEndpointImpl.init();
-		AirportRepository.init();
+		Fixture.tearDown();
 		addAirport();
 	}
 	

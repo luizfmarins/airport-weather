@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.crossover.trial.weather.api.WeatherCollectorEndpoint;
@@ -15,6 +16,7 @@ import com.crossover.trial.weather.repository.AirportRepository;
 import com.crossover.trial.weather.rest.RestWeatherCollectorEndpoint;
 import com.crossover.trial.weather.rest.RestWeatherQueryEndpoint;
 import com.crossover.trial.weather.rest.WeatherQueryEndpointImpl;
+import com.crossover.trial.weather.util.Fixture;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -22,16 +24,21 @@ import com.google.gson.JsonParser;
 public class WeatherEndpointTest {
 
     private WeatherQueryEndpoint _query = new RestWeatherQueryEndpoint();
-
     private WeatherCollectorEndpoint _update = new RestWeatherCollectorEndpoint();
 
     private Gson _gson = new Gson();
 
     private DataPoint _dp;
+    
+    @BeforeClass
+    public static void beforeClass() {
+    	AirportRepository.setInitized(true);
+    }
+    
     @Before
     public void setUp() throws Exception {
         WeatherQueryEndpointImpl.init();
-        AirportRepository.init();
+        Fixture.setup();
         _dp = new DataPoint.Builder()
                 .withCount(10).withFirst(10).withMedian(20).withLast(30).withMean(22).build();
         _update.updateWeather("BOS", "wind", _gson.toJson(_dp));

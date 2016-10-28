@@ -4,12 +4,12 @@ import static com.crossover.trial.weather.model.AtmosphericInformation.atmospher
 import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.CLOUDCOVER;
 import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.PRESSURE;
 import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.WIND;
-import static com.crossover.trial.weather.repository.InitialAirports.BOS;
-import static com.crossover.trial.weather.repository.InitialAirports.EWR;
-import static com.crossover.trial.weather.repository.InitialAirports.JFK;
 import static com.crossover.trial.weather.util.DataPointUtil.cloudOverDatapoint;
 import static com.crossover.trial.weather.util.DataPointUtil.pressureDatapoint;
 import static com.crossover.trial.weather.util.DataPointUtil.windDatapoint;
+import static com.crossover.trial.weather.util.InitialAirports.BOS;
+import static com.crossover.trial.weather.util.InitialAirports.EWR;
+import static com.crossover.trial.weather.util.InitialAirports.JFK;
 import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.updateWeather;
 import static com.crossover.trial.weather.util.rest.RestWeatherQueryUtil.queryWeather;
 import static com.jayway.restassured.RestAssured.get;
