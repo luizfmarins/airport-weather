@@ -17,6 +17,8 @@ public class DataPoint {
     public int second = 0;
     public int third = 0;
     public int count = 0;
+    private int median = 0;
+    private int last = 0;
 
     private DataPoint() {}
 
@@ -74,7 +76,23 @@ public class DataPoint {
         this.count = count;
     }
 
-    public String toString() {
+    public int getMedian() {
+		return median;
+	}
+
+    protected void setMedian(int median) {
+		this.median = median;
+	}
+
+	public int getLast() {
+		return last;
+	}
+
+	protected void setLast(int last) {
+		this.last = last;
+	}
+
+	public String toString() {
         return ReflectionToStringBuilder.toString(this, JSON_STYLE);
     }
     
@@ -170,6 +188,8 @@ public class DataPoint {
 		public DataPoint build() {
             DataPoint dataPoint = new DataPoint(this.first, this.second, this.mean, this.third, this.count);
             dataPoint.setMean(mean);
+            dataPoint.setMedian(median);
+            dataPoint.setLast(last);
 			return dataPoint;
         }
     }
