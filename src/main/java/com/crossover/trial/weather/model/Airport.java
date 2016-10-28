@@ -5,7 +5,6 @@ import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -1,7 +1,5 @@
 package com.crossover.trial.weather.loader;
 
-import jersey.repackaged.com.google.common.base.MoreObjects.ToStringHelper;
-
 import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;

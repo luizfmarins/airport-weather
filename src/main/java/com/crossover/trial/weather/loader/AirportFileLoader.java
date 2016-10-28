@@ -22,6 +22,10 @@ public class AirportFileLoader {
 		return lines.stream().map(l -> toAirportData(l)).collect(toList());
 	}
 	
+	public void close() {
+		
+	}
+	
 	private AirportData toAirportData(String line) {
 		String[] columns = line.split(SEPARATOR);
 		return new AirportData.Builder()

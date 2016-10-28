@@ -9,6 +9,8 @@ import static com.crossover.trial.weather.repository.InitialAirports.MMU;
 import static com.crossover.trial.weather.repository.InitialAirports.bos;
 import static com.crossover.trial.weather.repository.InitialAirports.mmu;
 import static com.crossover.trial.weather.util.DataPointUtil.windDatapoint;
+import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.getAirport;
+import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.getAirportAssertNotFound;
 import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.updateWeather;
 import static com.jayway.restassured.RestAssured.delete;
 import static com.jayway.restassured.RestAssured.get;
@@ -30,6 +32,7 @@ import org.junit.Test;
 import com.crossover.trial.weather.model.Airport;
 import com.crossover.trial.weather.model.datapoint.DataPoint;
 import com.crossover.trial.weather.model.datapoint.DataPointType;
+import com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil;
 
 public class RestWeatherCollectorEndpointTest extends RestTestBase {
 
@@ -65,8 +68,7 @@ public class RestWeatherCollectorEndpointTest extends RestTestBase {
 	
 	@Test
 	public void getAirport_unknownAirport() {
-		get("/collect/airport/" + UNKNOWN_AIRPORT)
-			.then().assertThat().statusCode(NOT_FOUND.getStatusCode());
+		getAirportAssertNotFound(UNKNOWN_AIRPORT);
 	}
 	
 	@Test
@@ -136,8 +138,7 @@ public class RestWeatherCollectorEndpointTest extends RestTestBase {
 		delete("collect/airport/" + BOS).then()
 			.assertThat().statusCode(OK.getStatusCode());
 		
-		get("/collect/airport/" + BOS)
-			.then().assertThat().statusCode(NOT_FOUND.getStatusCode());
+		getAirportAssertNotFound(BOS);
 		
 	}
 	
@@ -151,9 +152,5 @@ public class RestWeatherCollectorEndpointTest extends RestTestBase {
 		post("/collect/airport/" + iata + "/" + latitude + "/" + longitude)
 			.then().assertThat().statusCode(OK.getStatusCode());
 		
-	}
-
-	private Airport getAirport(String airportName) {
-		return get("/collect/airport/" + airportName).as(Airport.class);
 	}
 }

@@ -1,5 +1,8 @@
 package com.crossover.trial.weather.loader;
 
+import static com.crossover.trial.weather.loader.AirportLoaderTestUtil.bostonAirport;
+import static com.crossover.trial.weather.loader.AirportLoaderTestUtil.file;
+import static com.crossover.trial.weather.loader.AirportLoaderTestUtil.newarkAirport;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
@@ -13,7 +16,6 @@ import org.junit.Test;
 public class AirportFileLoaderTest {
 
 	private AirportFileLoader sut;
-	private File resource;
 	
 	@Test
 	public void readEmptyFile() throws Exception {
@@ -41,40 +43,11 @@ public class AirportFileLoaderTest {
 		List<AirportData> data = sut.load();
 		
 		assertThat(data, hasSize(2));
-		assertThat(data, contains(bostonAirport(),newarkAirport()));
-	}
-
-	private AirportData newarkAirport() {
-		return new AirportData.Builder()
-			.withCity("Newark")
-			.withCountry("United States")
-			.withIata("EWR")
-			.withIcao("KEWR")
-			.withLatitude("40.6925")
-			.withLongitude("-74.168667")
-			.withAltitude("18")
-			.withTimezone("-5")
-			.withDst("A")
-			.build();
-	}
-
-	private AirportData bostonAirport() {
-		return new AirportData.Builder()
-			.withCity("Boston")
-			.withCountry("United States")
-			.withIata("BOS")
-			.withIcao("KBOS")
-			.withLatitude("42.364347")
-			.withLongitude("-71.005181")
-			.withAltitude("19")
-			.withTimezone("-5")
-			.withDst("A")
-			.build();
+		assertThat(data, contains(bostonAirport(), newarkAirport()));
 	}
 	
-	private AirportFileLoader newFileLoader(String file) throws URISyntaxException {
-		String path = getClass().getResource(file).toURI().getPath();
-		resource = new File(path);
+	public AirportFileLoader newFileLoader(String file) throws URISyntaxException {
+		File resource = file(file);
 		return new AirportFileLoader(resource);
 	}
 }
