@@ -8,8 +8,6 @@ import java.io.*;
 /**
  * A simple airport loader which reads a file from disk and sends entries to the webservice
  *
- * TODO: Implement the Airport Loader
- * 
  * @author code test administrator
  */
 public class AirportLoader {

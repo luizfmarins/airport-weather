@@ -1,5 +1,7 @@
 package com.crossover.trial.weather.model;
 
+import static org.apache.commons.lang3.builder.ToStringStyle.JSON_STYLE;
+
 import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -68,7 +70,7 @@ public class Airport {
 	}
 
 	public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+        return ReflectionToStringBuilder.toString(this, JSON_STYLE);
     }
 
     @Override
