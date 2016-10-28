@@ -7,6 +7,7 @@ import java.util.Objects;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import com.crossover.trial.weather.model.datapoint.DataPoint;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -135,6 +136,7 @@ public class AtmosphericInformation {
 		return true;
 	}
 	
+	
 	public boolean hasInformation() {
 		return getCloudCover() != null 
 				|| getHumidity() != null 
@@ -144,6 +146,7 @@ public class AtmosphericInformation {
 				|| getWind() != null;
 	}
 
+	@JsonIgnore
 	public boolean isUpdatedInTheLastDay() {
 		Clock clock = Clock.newInstance();
 		return clock.isBeforeLastDay(getLastUpdateTime());

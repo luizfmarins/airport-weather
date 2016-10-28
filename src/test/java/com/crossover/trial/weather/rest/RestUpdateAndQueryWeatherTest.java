@@ -1,18 +1,26 @@
 package com.crossover.trial.weather.rest;
 
 import static com.crossover.trial.weather.model.AtmosphericInformation.atmosphericInformationBuilder;
-import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.*;
+import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.CLOUDCOVER;
+import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.PRESSURE;
+import static com.crossover.trial.weather.model.datapoint.DataPointType.Type.WIND;
 import static com.crossover.trial.weather.repository.InitialAirports.BOS;
 import static com.crossover.trial.weather.repository.InitialAirports.EWR;
 import static com.crossover.trial.weather.repository.InitialAirports.JFK;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.arrayContaining;
-import static org.hamcrest.Matchers.arrayWithSize;
-import static com.crossover.trial.weather.util.DataPointUtil.*;
+import static com.crossover.trial.weather.util.DataPointUtil.cloudOverDatapoint;
+import static com.crossover.trial.weather.util.DataPointUtil.pressureDatapoint;
+import static com.crossover.trial.weather.util.DataPointUtil.windDatapoint;
 import static com.crossover.trial.weather.util.rest.RestWeatherCollectorUtil.updateWeather;
 import static com.crossover.trial.weather.util.rest.RestWeatherQueryUtil.queryWeather;
+import static com.jayway.restassured.RestAssured.get;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
+import static org.hamcrest.Matchers.arrayWithSize;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 
-import org.hamcrest.Matchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 import com.crossover.trial.weather.model.AtmosphericInformation;
@@ -90,7 +98,7 @@ public class RestUpdateAndQueryWeatherTest extends RestTestBase {
 		AtmosphericInformation[] infos = queryWeather(BOS, DISTANCE_BOS_JFK);
 		
 		assertThat(infos, arrayWithSize(2));
-		assertThat(infos, Matchers.arrayContainingInAnyOrder(
+		assertThat(infos, arrayContainingInAnyOrder(
 				atmosphericInformationBuilder()
 					.withWind(windDatapoint())
 					.withPressure(EMPTY_DATA_POINT)
@@ -110,7 +118,7 @@ public class RestUpdateAndQueryWeatherTest extends RestTestBase {
 		AtmosphericInformation[] infos = queryWeather(BOS, DISTANCE_BOS_EWR);
 		
 		assertThat(infos, arrayWithSize(2));
-		assertThat(infos, Matchers.arrayContainingInAnyOrder(
+		assertThat(infos, arrayContainingInAnyOrder(
 				atmosphericInformationBuilder()
 					.withWind(windDatapoint())
 					.withCloudCover(EMPTY_DATA_POINT)
@@ -121,6 +129,15 @@ public class RestUpdateAndQueryWeatherTest extends RestTestBase {
 					.withCloudCover(cloudOverDatapoint())
 					.withPressure(EMPTY_DATA_POINT)
 					.build()));
+	}
+	
+	@Test
+	public void atmosphericInformation_doesntContains_updatedInTheLastDay() {
+		updateWeather(BOS, WIND, windDatapoint());
+		
+		String json = get("query/weather/" + BOS + "/" + 0).asString();
+		
+		assertThat(json, not(containsString("updatedInTheLastDay")));
 	}
 
 }
