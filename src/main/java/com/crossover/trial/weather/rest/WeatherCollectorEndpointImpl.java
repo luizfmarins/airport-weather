@@ -54,6 +54,9 @@ public class WeatherCollectorEndpointImpl implements WeatherCollectorEndpoint {
     @Override
     public Response getAirport(String iata) {
         Airport ad = airportRepository.findByCode(iata);
+        if (ad == null)
+        	return Response.status(Response.Status.NOT_FOUND).build();
+        
         return Response.status(Response.Status.OK).entity(ad).build();
     }
 
@@ -71,7 +74,12 @@ public class WeatherCollectorEndpointImpl implements WeatherCollectorEndpoint {
 
     @Override
     public Response deleteAirport(@PathParam("iata") String iata) {
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    	Airport airport = airportRepository.findByCode(iata);
+    	if (airport == null)
+        	return Response.status(Response.Status.NOT_FOUND).build();
+    	
+    	airportRepository.delete(airport);
+        return Response.status(Response.Status.OK).build();
     }
 
     @Override

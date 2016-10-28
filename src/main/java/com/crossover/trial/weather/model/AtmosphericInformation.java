@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /**
  * encapsulates sensor information for a particular location
  */
+// TODO check rest contract
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AtmosphericInformation {
 

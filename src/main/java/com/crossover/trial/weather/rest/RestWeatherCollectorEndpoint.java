@@ -68,7 +68,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
 
 
     @Override
-    public Response deleteAirport(@PathParam("iata") String iata) {
+    public Response deleteAirport(String iata) {
     	LOGGER.info("WeatherCollectorEndpoint.deleteAirport("+ iata + ")");
         Response response = delegate.deleteAirport(iata);
         LOGGER.info("WeatherCollectorEndpoint.deleteAirport Response: " + gson.toJson(response.getEntity()));

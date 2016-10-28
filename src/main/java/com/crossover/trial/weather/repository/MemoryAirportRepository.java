@@ -28,6 +28,11 @@ class MemoryAirportRepository extends AirportRepository {
 	}
 
 	@Override
+	public void delete(Airport airport) {
+		airports.remove(airport.getIata());
+	}
+	
+	@Override
 	protected void doClear() {
 		airports.clear();
 	}

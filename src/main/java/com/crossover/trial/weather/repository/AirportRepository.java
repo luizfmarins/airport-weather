@@ -22,6 +22,8 @@ public abstract class AirportRepository {
 	
 	protected abstract void doClear();
 
+	public abstract void delete(Airport airport);
+	
 	public static AirportRepository getInstance() {
 		if (instance == null)
 			instance = new MemoryAirportRepository();
